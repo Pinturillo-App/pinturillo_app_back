@@ -12,10 +12,12 @@ dotenv.config();
 export class Server {
     private app: express.Application;
     private port: number;
+    private path: string;
 
     constructor() {
         this.app = express();
         this.port = parseInt(process.env.PORT || '3000', 10);
+        this.path = '/api';
         this.initializeMiddleware();
         this.initializeRoutes();
         this.initializeDataSource();
@@ -30,7 +32,10 @@ export class Server {
     }
 
     private initializeRoutes(): void {
-          
+        // this.app.use(`${ this.path }/category`, categoryRouter);
+        // this.app.use(`${ this.path }/room`, roomRouter);
+        // this.app.use(`${ this.path }/word-category`, wordCategoryRouter);
+        // this.app.use(`${ this.path }/word`, wordRouter);
     }
 
     private async initializeDataSource(): Promise<void> {
