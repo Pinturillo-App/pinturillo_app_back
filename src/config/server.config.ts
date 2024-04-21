@@ -9,7 +9,6 @@ import { AppDataSource } from './data-source.config';
 
 dotenv.config();
 
-
 export class Server {
     private app: express.Application;
     private port: number;
