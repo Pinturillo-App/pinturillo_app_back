@@ -16,7 +16,6 @@ export class Server {
     constructor() {
         this.app = express();
         this.port = parseInt(process.env.PORT || '3000', 10);
-
         this.initializeMiddleware();
         this.initializeRoutes();
         this.initializeDataSource();
@@ -31,6 +30,7 @@ export class Server {
     }
 
     private initializeRoutes(): void {
+          
     }
 
     private async initializeDataSource(): Promise<void> {
