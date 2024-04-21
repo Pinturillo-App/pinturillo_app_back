@@ -31,7 +31,7 @@ export class Server {
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     }
 
-    private initializeRoutes(): void {
+    private initializeRoutes(): void {      
         // this.app.use(`${ this.path }/category`, categoryRouter);
         // this.app.use(`${ this.path }/room`, roomRouter);
         // this.app.use(`${ this.path }/word-category`, wordCategoryRouter);
