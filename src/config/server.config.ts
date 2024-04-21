@@ -37,19 +37,15 @@ export class Server {
     private async initializeDataSource(): Promise<void> {
         try {
             await AppDataSource.initialize();
-            this.startServer();
             console.log('Data Source has been initialized!');
         } catch (error) {
             console.log(error);
         }
     }
 
-    private startServer(): void {
+    public startServer(): void {
         this.app.listen(this.port, () => {
             console.log(`Server is running on http://localhost:${ this.port }`);
         });
     }
 }
-
-
-new Server();
