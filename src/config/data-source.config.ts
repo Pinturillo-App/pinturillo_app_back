@@ -1,8 +1,11 @@
+import * as dotenv from 'dotenv';
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASSWORD, DATABASE_PORT, DATABASE_TYPE, DATABASE_USER } from "./database.config";
 
 
+dotenv.config();
+
+const { DATABASE_HOST, DATABASE_NAME, DATABASE_PASSWORD, DATABASE_PORT, DATABASE_TYPE, DATABASE_USER } = process.env;
 const DEFAULT_PORT = "5432";
 const DEFAULT_SYNCHRONIZE = false;
 
