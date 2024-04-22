@@ -1,11 +1,12 @@
-import Joi from "joi";
+import Joi from 'joi';
+
 
 export const categoryUpdateSchema = Joi.object({
     id: Joi.string()
         .required()
         .messages({
-            'string.empty': 'Category ID cannot be empty.',
-            'any.required': 'Category ID is required.'
+            'string.empty': 'Category id cannot be empty.',
+            'any.required': 'Category id is required.'
         }),
     name: Joi.string()
         .min(3)
