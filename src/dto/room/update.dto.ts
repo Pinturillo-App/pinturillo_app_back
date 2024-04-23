@@ -1,11 +1,12 @@
-import Joi from "joi";
+import Joi from 'joi';
+
 
 export const roomUpdateSchema = Joi.object({
     id: Joi.string()
         .required()
         .messages({
-            'string.empty': 'Room ID cannot be empty.',
-            'any.required': 'Room ID is required.'
+            'string.empty': 'Room id cannot be empty.',
+            'any.required': 'Room id is required.'
         }),
     name: Joi.string()
         .min(3)
@@ -17,15 +18,15 @@ export const roomUpdateSchema = Joi.object({
         }),
     state: Joi.string()
         .optional()
-        .valid('Sin Iniciar', 'En Curso', 'Finalizado')
+        .valid('Sin iniciar', 'En curso', 'Finalizado')
         .messages({
             'string.empty': 'Room state cannot be empty.',
-            'any.only': 'Room state must be either "Sin Iniciar", "En Curso" or "Finalizado".',
+            'any.only': 'Room state must be either "Sin iniciar", "En curso" or "Finalizado".',
             'any.required': 'Room state is required.'
         }),
     idCategory: Joi.string()
         .optional()
         .messages({
-            'string.empty': 'Category ID cannot be empty.'
+            'string.empty': 'Category id cannot be empty.'
         })
 }).options({ abortEarly: false });
