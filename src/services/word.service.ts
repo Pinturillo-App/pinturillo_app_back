@@ -1,0 +1,1 @@
+import { WordRepository } from "../repositories/word.repository";

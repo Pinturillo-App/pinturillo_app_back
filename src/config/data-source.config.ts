@@ -1,7 +1,11 @@
 import * as dotenv from 'dotenv';
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource } from "typeorm";   
 
+import { Category } from '../entities/category.entity';
+import { Word } from '../entities/word.entity';
+import { Room } from '../entities/room.entity';
+import { WordCategory } from '../entities/word-category.entity';
 
 dotenv.config();
 
@@ -18,7 +22,7 @@ export const AppDataSource = new DataSource({
     database: DATABASE_NAME,
     synchronize: DEFAULT_SYNCHRONIZE,
     logging:  false,
-    entities: [],
+    entities: [ Category, Word, Room, WordCategory ],
     migrations: [__dirname + "/migration/*.ts"],
     subscribers: [],
 });
