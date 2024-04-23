@@ -1,4 +1,5 @@
-import Joi from "joi";
+import Joi from 'joi';
+
 
 export const wordCreateSchema = Joi.object({
     text: Joi.string()
