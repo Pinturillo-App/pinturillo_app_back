@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
+import { Category } from './category.entity';
 
 
 @Entity({ name: 'room' })
@@ -12,9 +13,10 @@ export class Room extends BaseEntity{
   @Column({ name: 'state', type: 'varchar', default: 'Sin iniciar' })
   state: string;
   
-  // @Column({ name: 'id_category', nullable: false})
-  // idCategory: string;
+  @Column({ name: 'id_category', nullable: false})
+  idCategory: string;
 
-  // @ManyToOne(() => Category, ( category => category.rooms ))
-  // category?: Category;
+  @ManyToOne(() => Category, {nullable: false})
+  @JoinColumn({ name: "id_category"})
+  category?: Category;
 }

@@ -14,6 +14,10 @@ export class WordRepository{
         return this.repository.findOneBy({ id });
     }      
 
+    async getWordByText(text: string) {
+        return this.repository.findOneBy({ text });
+    }
+
     async createWord(word: CreateWordDto) {
         return this.repository.save(word);
     }
