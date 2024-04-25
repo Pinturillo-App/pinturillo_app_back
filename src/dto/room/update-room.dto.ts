@@ -8,7 +8,7 @@ export class UpdateRoomDto {
     idCategory: string;
 }
 
-export const roomUpdateSchema = Joi.object({
+export const updateRoomSchema = Joi.object({
     id: Joi.number()
         .required()
         .messages({

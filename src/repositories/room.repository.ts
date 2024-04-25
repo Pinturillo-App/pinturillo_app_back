@@ -1,10 +1,9 @@
-import { AppDataSource } from "../config/data-source.config";
-import { CreateRoomDto } from "../dto/room/create-room.dto";
-import { UpdateRoomDto } from "../dto/room/update-room.dto";
-import { Room } from "../entities/room.entity";
+import { AppDataSource } from '../config/data-source.config';
+import { CreateRoomDto, UpdateRoomDto } from '../dto/room';
+import { Room } from '../entities';
+
 
 export class RoomRepository{
-    
     private repository = AppDataSource.getRepository(Room);
 
     async getAllRooms() {
@@ -26,5 +25,4 @@ export class RoomRepository{
     async deleteRoom(id: number) {
         return this.repository.delete(id);
     }
-
 }

@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
-import { Category } from './category.entity';
 
 
 @Entity({ name: 'room' })
@@ -18,5 +17,4 @@ export class Room extends BaseEntity{
 
   // @ManyToOne(() => Category, ( category => category.rooms ))
   // category?: Category;
-  
 }
