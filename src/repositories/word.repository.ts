@@ -10,15 +10,15 @@ export class WordRepository{
         return this.repository.find();
     }
 
-    async getWordById(id: number) {
+    async findWordById(id: number) {
         return this.repository.findOneBy({ id });
     }      
 
-    async getWordByText(text: string) {
+    async findWordByText(text: string) {
         return this.repository.findOneBy({ text });
     }
 
-    async createWord(word: CreateWordDto) {
+    async saveWord(word: CreateWordDto) {
         return this.repository.save(word);
     }
 

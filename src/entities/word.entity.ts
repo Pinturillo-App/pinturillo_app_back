@@ -23,4 +23,5 @@ export class Word extends BaseEntity{
     }
   })
   categories?: Category[];
+  
 }
