@@ -6,7 +6,7 @@ export class CreateWordCategoryDto {
     idCategory: number;
 }
 
-export const wordCategoryCreateSchema = Joi.object({
+export const createWordCategorySchema = Joi.object({
     idWord: Joi.number()
         .required()
         .messages({
