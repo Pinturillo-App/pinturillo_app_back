@@ -19,7 +19,7 @@ export class Server {
         this.app = express();
         this.port = parseInt(process.env.PORT || '3000');
         this.path = '/api';
-        
+    
         this.initializeMiddleware();
         this.initializeRoutes();
         this.initializeDataSource();

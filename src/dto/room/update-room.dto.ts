@@ -1,8 +1,15 @@
 import Joi from 'joi';
 
 
+export class UpdateRoomDto {
+    id: number;
+    name: string;
+    state: string;
+    idCategory: string;
+}
+
 export const roomUpdateSchema = Joi.object({
-    id: Joi.string()
+    id: Joi.number()
         .required()
         .messages({
             'string.empty': 'Room id cannot be empty.',

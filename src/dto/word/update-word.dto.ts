@@ -1,8 +1,13 @@
 import Joi from 'joi';
 
 
+export class UpdateWordDto {
+    id: number;
+    text: string;
+}
+
 export const wordUpdateSchema = Joi.object({
-    id: Joi.string()
+    id: Joi.number()
         .required()
         .messages({
             'string.empty': 'Word id cannot be empty.',

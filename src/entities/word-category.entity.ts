@@ -1,18 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, JoinColumn, Column } from 'typeorm';
 import { Word } from './word.entity';
 import { Category } from './category.entity';
 
 
-@Entity({ name: 'WordCategory' })
+@Entity({ name: 'wordcategory' })
 export class WordCategory extends BaseEntity{
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ name: 'id_word', type: 'varchar', length: 50, nullable: false })
+  idWord: string;
+
+  @Column({ name: 'id_category', type: 'varchar', length: 50, nullable: false })
+  idCategory: string;
 
   @ManyToOne(() => Word, { nullable: false })
-  @JoinColumn({ name: 'idWord' })
-  idWord: Word;
+  @JoinColumn({ name: 'word_id' , referencedColumnName: 'id'})
+  word_id: Word[];
 
   @ManyToOne(() => Category, { nullable: false })
-  @JoinColumn({ name: 'idCategory' })
-  idCategory: Category;
+  @JoinColumn({ name: 'category_id', referencedColumnName: 'id'})
+  category_id: Category[];
 }

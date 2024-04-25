@@ -1,8 +1,13 @@
 import Joi from 'joi';
 
 
+export class UpdateCategoryDto {
+    id: number;
+    name: string;
+}
+
 export const categoryUpdateSchema = Joi.object({
-    id: Joi.string()
+    id: Joi.number()
         .required()
         .messages({
             'string.empty': 'Category id cannot be empty.',
