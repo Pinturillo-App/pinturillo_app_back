@@ -1,10 +1,9 @@
-import { AppDataSource } from "../config/data-source.config";
-import { CreateCategoryDto } from "../dto/category/create-category.dto";
-import { UpdateCategoryDto } from "../dto/category/update-category.dto";
-import { Category } from "../entities/category.entity";
+import { AppDataSource } from '../config/data-source.config';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dto/category';
+import { Category } from '../entities';
+
 
 export class CategoryRepository{
-
     private repository = AppDataSource.getRepository(Category);
 
     async getAllCategories() {
@@ -26,5 +25,4 @@ export class CategoryRepository{
     async deleteCategory(id: number) {
         return this.repository.delete(id);
     }
-
 }

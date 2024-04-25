@@ -3,7 +3,7 @@ import Joi from 'joi';
 
 export class CreateWordCategoryDto {
     idWord: number;
-    idCategory: string;
+    idCategory: number;
 }
 
 export const wordCategoryCreateSchema = Joi.object({

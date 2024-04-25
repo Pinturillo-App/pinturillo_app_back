@@ -5,7 +5,7 @@ export class CreateCategoryDto {
     name: string;
 }
 
-export const categoryCreateSchema = Joi.object({
+export const createCategorySchema = Joi.object({
     name: Joi.string()
         .required()
         .min(3)

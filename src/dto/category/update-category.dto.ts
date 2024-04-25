@@ -6,7 +6,7 @@ export class UpdateCategoryDto {
     name: string;
 }
 
-export const categoryUpdateSchema = Joi.object({
+export const updateCategorySchema = Joi.object({
     id: Joi.number()
         .required()
         .messages({

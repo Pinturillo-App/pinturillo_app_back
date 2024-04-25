@@ -5,7 +5,7 @@ import { errorHandler } from './../middlewares/error.middleware';
 import * as swaggerUi from 'swagger-ui-express';
 import swaggerSpec from '../swagger';
 import { AppDataSource } from './data-source.config';
-import categoryRouter from '../routes/category.routes';
+import { categoryRouter, roomRouter, wordCategoryRouter, wordRouter } from '../routes';
 
 
 dotenv.config();
@@ -35,9 +35,9 @@ export class Server {
 
     private initializeRoutes(): void {      
         this.app.use(`${ this.path }/category`, categoryRouter);
-        // this.app.use(`${ this.path }/room`, roomRouter);
-        // this.app.use(`${ this.path }/word-category`, wordCategoryRouter);
-        // this.app.use(`${ this.path }/word`, wordRouter);
+        this.app.use(`${ this.path }/room`, roomRouter);
+        this.app.use(`${ this.path }/wordCategory`, wordCategoryRouter);
+        this.app.use(`${ this.path }/word`, wordRouter);
     }
 
     private async initializeDataSource(): Promise<void> {

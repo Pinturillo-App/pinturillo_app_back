@@ -1,6 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, OneToMany } from 'typeorm';
-import { Word } from './word.entity';
-import { Room } from './room.entity';
 
 
 @Entity({ name: 'category'})
