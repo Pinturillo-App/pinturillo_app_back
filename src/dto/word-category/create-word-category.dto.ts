@@ -1,8 +1,13 @@
 import Joi from 'joi';
 
 
+export class CreateWordCategoryDto {
+    idWord: number;
+    idCategory: string;
+}
+
 export const wordCategoryCreateSchema = Joi.object({
-    idWord: Joi.string()
+    idWord: Joi.number()
         .required()
         .messages({
             'string.empty': 'Word id cannot be empty.',

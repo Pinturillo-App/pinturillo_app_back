@@ -1,4 +1,4 @@
 export class Word{
-    id: string;
+    id: number;
     text: string;
 }

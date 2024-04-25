@@ -2,18 +2,21 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEnti
 import { Category } from './category.entity';
 
 
-@Entity({ name: 'Room' })
+@Entity({ name: 'room' })
 export class Room extends BaseEntity{
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ length: 50, nullable: false })
+  @Column({ name: 'name', type: 'varchar', length: 50, nullable: false })
   name: string;
 
-  @Column({ default: 'Sin iniciar' })
+  @Column({ name: 'state', type: 'varchar', default: 'Sin iniciar' })
   state: string;
+  
+  // @Column({ name: 'id_category', nullable: false})
+  // idCategory: string;
 
-  @ManyToOne(() => Category, { nullable: false })
-  @JoinColumn({ name: 'idCategory' })
-  idCategory: Category;
+  // @ManyToOne(() => Category, ( category => category.rooms ))
+  // category?: Category;
+  
 }

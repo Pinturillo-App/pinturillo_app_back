@@ -1,5 +1,5 @@
 export class WordCategory{
-    id: string;
+    id: number;
     idWord: string;
     idCategory: string;
 }

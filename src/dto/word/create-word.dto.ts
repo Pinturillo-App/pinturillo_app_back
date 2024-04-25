@@ -1,6 +1,10 @@
 import Joi from 'joi';
 
 
+export class CreateWordDto {
+    text: string;
+}
+
 export const wordCreateSchema = Joi.object({
     text: Joi.string()
         .required()

@@ -1,6 +1,10 @@
 import Joi from 'joi';
 
 
+export class CreateCategoryDto {
+    name: string;
+}
+
 export const categoryCreateSchema = Joi.object({
     name: Joi.string()
         .required()

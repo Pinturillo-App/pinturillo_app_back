@@ -1,5 +1,10 @@
 import Joi from 'joi';
 
+export class CreateRoomDto {
+    name: string;
+    state: string;
+    idCategory: string;
+}
 
 export const roomCreateSchema = Joi.object({
     name: Joi.string()
