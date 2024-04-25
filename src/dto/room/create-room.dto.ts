@@ -1,12 +1,13 @@
 import Joi from 'joi';
 
+
 export class CreateRoomDto {
     name: string;
     state: string;
     idCategory: string;
 }
 
-export const roomCreateSchema = Joi.object({
+export const createRoomSchema = Joi.object({
     name: Joi.string()
         .min(3)
         .max(50)

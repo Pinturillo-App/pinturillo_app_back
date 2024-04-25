@@ -1,37 +1,39 @@
-const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerJsdoc = require('swagger-jsdoc');
 
 
 const options = {
     definition: {
-        openapi: "3.1.0",
+        openapi: '3.1.0',
         info: {
-            title: "PinturilloApp API with swagger",
-            version: "1.0.0",
-            description: "This is an API REST application made with Express and documented with Swagger",
-            termsOfService: "http://swagger.io/terms/",
+            title: 'PinturilloApp API with swagger',
+            version: '1.0.0',
+            description: 'This is an API REST application made with Express and documented with Swagger',
+            termsOfService: 'http://swagger.io/terms/',
             license: {
-                name: "MIT",
-                url: "https://spdx.org/licenses/MIT.html",
+                name: 'MIT',
+                url: 'https://spdx.org/licenses/MIT.html',
             },
             contact: {
-                name: "PinturilloApp"
+                name: 'PinturilloApp'
             },
         },
         paths: {
-            "/category": {
+            '/category': {
             },
-            "/room": {
+            '/room': {
             },
-            "/word": {
+            '/word': {
             }
         },
         servers: [
             {
-                url: "http://localhost:3000/api",
+                url: 'http://localhost:3000/api',
             },
         ],
     },
-    apis: ["./controllers/*.ts"],
+    apis: [
+        './controllers/*.ts'
+    ],
 };
 
 
