@@ -17,26 +17,26 @@ export class CategoryService {
         return await this.categoryRepository.getAllCategories();
     }
 
-    async getCategoryById(id: number): Promise<Category | undefined> {
-        const responseById = await this.categoryRepository.getCategoryById(id);
+    async findCategoryById(id: number): Promise<Category | undefined> {
+        const responseById = await this.categoryRepository.findCategoryById(id);
 
         if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
 
-        return await this.categoryRepository.getCategoryById(id);
+        return await this.categoryRepository.findCategoryById(id);
     }
 
-    async createCategory(category: CreateCategoryDto): Promise<Category | undefined> {
-        const responseByName = await this.categoryRepository.getCategoryByName(category.name);
+    async saveCategory(category: CreateCategoryDto): Promise<Category | undefined> {
+        const responseByName = await this.categoryRepository.findCategoryByName(category.name);
         const data = createCategorySchema.validate(category, { abortEarly: false });
 
         if (responseByName) throw new Error(CATEGORY_ALREADY_EXISTS);
         if (data.error) throw mapJoiErrors(data.error.details);
 
-        return await this.categoryRepository.createCategory(category);
+        return await this.categoryRepository.saveCategory(category);
     }
 
     async updateCategory(category: UpdateCategoryDto): Promise<void> {
-        const responseById = await this.categoryRepository.getCategoryById(category.id);
+        const responseById = await this.categoryRepository.findCategoryById(category.id);
         const data = updateCategorySchema.validate(category, { abortEarly: false });
 
         if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
@@ -46,7 +46,7 @@ export class CategoryService {
     }
 
     async deleteCategory(id: number): Promise<void> {
-        const responseById = await this.categoryRepository.getCategoryById(id);
+        const responseById = await this.categoryRepository.findCategoryById(id);
 
         if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
 

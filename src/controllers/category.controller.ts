@@ -10,11 +10,11 @@ export class CategoryController {
         this.categoryService = new CategoryService();
     }
 
-    public getCategoryById = async (req: Request, res: Response) => {
+    public findCategoryById = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         try {
-            const category = await this.categoryService.getCategoryById(+id);
+            const category = await this.categoryService.findCategoryById(+id);
 
             return res.status(OK_STATUS).json(category);
         } catch (error) {
@@ -32,11 +32,11 @@ export class CategoryController {
         }
     }
 
-    public createCategory = async (req: Request, res: Response) => {
+    public saveCategory = async (req: Request, res: Response) => {
         const category = req.body;
 
         try {
-            await this.categoryService.createCategory(category);
+            await this.categoryService.saveCategory(category);
 
             return res.status(CREATED_STATUS).json(category);
         } catch (error) {

@@ -10,11 +10,11 @@ export class WordController {
         this.wordService = new WordService();
     }
 
-    public getWordById = async (req: Request, res: Response) => {
+    public findWordById = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         try {
-            const word = await this.wordService.getWordById(+id);
+            const word = await this.wordService.findWordById(+id);
 
             return res.status(OK_STATUS).json(word);
         } catch (error) {
@@ -32,11 +32,11 @@ export class WordController {
         }
     }
 
-    public createWord = async (req: Request, res: Response) => {
+    public saveWord = async (req: Request, res: Response) => {
         const word = req.body;
 
         try {
-            await this.wordService.createWord(word);
+            await this.wordService.saveWord(word);
             return res.status(CREATED_STATUS).json(word);
         } catch (error) {
             if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);

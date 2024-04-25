@@ -16,26 +16,26 @@ export class WordService {
         return await this.wordRepository.getAllWords();
     }
 
-    async getWordById(id: number): Promise<Word | undefined> {
-        const responseById = await this.wordRepository.getWordById(id);
+    async findWordById(id: number): Promise<Word | undefined> {
+        const responseById = await this.wordRepository.findWordById(id);
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
 
-        return await this.wordRepository.getWordById(id);
+        return await this.wordRepository.findWordById(id);
     }
 
-    async createWord(word: CreateWordDto): Promise<Word | undefined> {
-        const responseByName = await this.wordRepository.getWordByText(word.text);
+    async saveWord(word: CreateWordDto): Promise<Word | undefined> {
+        const responseByName = await this.wordRepository.findWordByText(word.text);
         const data = createWordSchema.validate(word, { abortEarly: false });
 
         if (data.error) throw mapJoiErrors(data.error.details);
         if (responseByName) throw new Error(WORD_ALREADY_EXISTS);
 
-        return await this.wordRepository.createWord(word);
+        return await this.wordRepository.saveWord(word);
     }
 
     async updateWord(word: UpdateWordDto): Promise<void> {
-        const responseById = await this.wordRepository.getWordById(word.id);
+        const responseById = await this.wordRepository.findWordById(word.id);
         const data = updateWordSchema.validate(word, { abortEarly: false });
 
         if (data.error) throw mapJoiErrors(data.error.details);
@@ -45,7 +45,7 @@ export class WordService {
     }
 
     async deleteWord(id: number): Promise<void> {
-        const responseById = await this.wordRepository.getWordById(id);
+        const responseById = await this.wordRepository.findWordById(id);
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
 
