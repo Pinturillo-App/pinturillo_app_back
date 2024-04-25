@@ -15,5 +15,5 @@ export const categoryCreateSchema = Joi.object({
             'string.min': 'Category name must be at least {#limit} characters long.',
             'string.max': 'Category name cannot exceed {#limit} characters.',
             'any.required': 'Category name is required.'
-        })        
+        })
 }).options({ abortEarly: false });
