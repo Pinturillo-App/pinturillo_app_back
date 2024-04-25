@@ -1,10 +1,8 @@
 import * as dotenv from 'dotenv';
 import "reflect-metadata";
 import { DataSource } from "typeorm";   
-import { Category } from '../entities/category.entity';
-import { Room } from '../entities/room.entity';
-import { WordCategory } from '../entities/word-category.entity';
-import { Word } from '../entities/word.entity';
+import { Category, Room, Word, WordCategory } from '../entities';
+
 
 dotenv.config();
 
