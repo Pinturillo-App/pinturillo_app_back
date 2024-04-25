@@ -19,5 +19,4 @@ export class Room extends BaseEntity{
   @ManyToOne(() => Category, {nullable: false})
   @JoinColumn({ name: "id_category"})
   category?: Category;
-  
 }

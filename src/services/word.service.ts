@@ -51,5 +51,4 @@ export class WordService {
 
         this.wordRepository.deleteWord(id);
     }
-    
 }

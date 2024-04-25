@@ -12,5 +12,4 @@ export class Category extends BaseEntity{
   
   @ManyToMany(() => Word, word => word.categories, { eager: true })
   words?: Word[];
-
 }

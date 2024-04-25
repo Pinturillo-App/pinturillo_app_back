@@ -37,6 +37,7 @@ export class WordController {
 
         try {
             await this.wordService.saveWord(word);
+            
             return res.status(CREATED_STATUS).json(word);
         } catch (error) {
             if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
@@ -49,6 +50,7 @@ export class WordController {
 
         try {
             await this.wordService.updateWord(word);
+
             return res.status(OK_STATUS).json(word);
         } catch (error) {
             if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
@@ -61,10 +63,10 @@ export class WordController {
 
         try {
             await this.wordService.deleteWord(+id);
+
             return res.status(OK_STATUS).json({ message: `Word with ${ id } deleted successfully` });
         } catch (error) {
             return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
         }
     }
-
 }
