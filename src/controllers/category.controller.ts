@@ -40,7 +40,8 @@ export class CategoryController {
 
             return res.status(CREATED_STATUS).json(category);
         } catch (error) {
-            return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
+            else return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
         }
     }
 
@@ -52,7 +53,8 @@ export class CategoryController {
 
             return res.status(OK_STATUS).json(category);
         } catch (error) {
-            return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
+            else return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
         }
     }
 

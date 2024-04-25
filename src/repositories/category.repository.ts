@@ -14,6 +14,10 @@ export class CategoryRepository{
         return this.repository.findOneBy({ id });
     }
 
+    async getCategoryByName(name: string) {
+        return this.repository.findOneBy({ name });
+    }
+
     async createCategory(category: CreateCategoryDto) {
         return this.repository.save(category);
     }
