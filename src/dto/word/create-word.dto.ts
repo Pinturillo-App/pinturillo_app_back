@@ -5,7 +5,7 @@ export class CreateWordDto {
     text: string;
 }
 
-export const wordCreateSchema = Joi.object({
+export const createWordSchema = Joi.object({
     text: Joi.string()
         .required()
         .min(3)

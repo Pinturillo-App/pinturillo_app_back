@@ -1,1 +1,1 @@
-import { WordRepository } from "../repositories/word.repository";
+import { WordRepository } from '../repositories/word.repository';

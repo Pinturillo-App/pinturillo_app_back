@@ -1,1 +1,1 @@
-import { RoomRepository } from "../repositories/room.repository";
+import { RoomRepository } from '../repositories/room.repository';

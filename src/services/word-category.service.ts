@@ -1,1 +1,1 @@
-import { WordCategoryRepository } from "../repositories/word-category.repository";
+import { WordCategoryRepository } from '../repositories/word-category.repository';

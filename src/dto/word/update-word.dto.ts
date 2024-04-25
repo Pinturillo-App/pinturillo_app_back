@@ -6,7 +6,7 @@ export class UpdateWordDto {
     text: string;
 }
 
-export const wordUpdateSchema = Joi.object({
+export const updateWordSchema = Joi.object({
     id: Joi.number()
         .required()
         .messages({

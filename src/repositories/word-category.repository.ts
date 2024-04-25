@@ -1,8 +1,8 @@
-import { AppDataSource } from "../config/data-source.config";
-import { CreateWordCategoryDto } from "../dto/word-category/create-word-category.dto";
+import { AppDataSource } from '../config/data-source.config';
+import { CreateWordCategoryDto } from '../dto/word-category';
+
 
 export class WordCategoryRepository{
-    
     private repository = AppDataSource.getRepository(WordCategoryRepository);      
 
     // async createWordCategory(wordCategory: CreateWordCategoryDto) {
@@ -12,5 +12,4 @@ export class WordCategoryRepository{
     async deleteWordCategory(id: number) {
         return this.repository.delete(id);
     }
-
 }

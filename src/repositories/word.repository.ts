@@ -1,10 +1,9 @@
-import { AppDataSource } from "../config/data-source.config";
-import { CreateWordDto } from "../dto/word/create-word.dto";
-import { UpdateWordDto } from "../dto/word/update-word.dto";
-import { Word } from "../entities/word.entity";
+import { AppDataSource } from '../config/data-source.config';
+import { CreateWordDto, UpdateWordDto } from '../dto/word';
+import { Word } from '../entities';
+
 
 export class WordRepository{
-    
     private repository = AppDataSource.getRepository(Word);
 
     async getAllWords() {
@@ -26,5 +25,4 @@ export class WordRepository{
     async deleteWord(id: number) {
         return this.repository.delete(id);
     }
-
 }

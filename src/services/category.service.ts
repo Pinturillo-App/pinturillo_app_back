@@ -1,11 +1,12 @@
-import { CategoryRepository } from "../repositories/category.repository";
-import { Category } from "../entities/category.entity";
-import { CreateCategoryDto, categoryCreateSchema } from "../dto/category/create-category.dto";
-import { UpdateCategoryDto, categoryUpdateSchema } from "../dto/category/update-category.dto";
+import { CategoryRepository } from '../repositories/category.repository';
+import { Category } from '../entities/category.entity';
+import { CreateCategoryDto, createCategorySchema, UpdateCategoryDto, updateCategorySchema } from '../dto/category';
+import { CATEGORY_ALREADY_EXISTS, CATEGORY_NOT_FOUND } from '../utilities/messages.utility';
+import { mapJoiErrors } from '../middlewares/validation-error.middleware';
+
 
 
 export class CategoryService {
-
     private categoryRepository: CategoryRepository;
     
     constructor() {
@@ -17,31 +18,38 @@ export class CategoryService {
     }
 
     async getCategoryById(id: number): Promise<Category | undefined> {
-        const response = await this.categoryRepository.getCategoryById(id);
-        if (!response) throw new Error("Category not found");
+        const responseById = await this.categoryRepository.getCategoryById(id);
+
+        if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
+
         return await this.categoryRepository.getCategoryById(id);
     }
 
     async createCategory(category: CreateCategoryDto): Promise<Category | undefined> {
-        const data = categoryCreateSchema.validate( category );
-        if (data.error) throw new Error(data.error.details[0].message);
+        const responseByName = await this.categoryRepository.getCategoryByName(category.name);
+        const data = createCategorySchema.validate(category, { abortEarly: false });
+
+        if (responseByName) throw new Error(CATEGORY_ALREADY_EXISTS);
+        if (data.error) throw mapJoiErrors(data.error.details);
+
         return await this.categoryRepository.createCategory(category);
     }
 
     async updateCategory(category: UpdateCategoryDto): Promise<void> {
-        const response = await this.categoryRepository.getCategoryById(category.id);
-        const data = categoryUpdateSchema.validate( category );
+        const responseById = await this.categoryRepository.getCategoryById(category.id);
+        const data = updateCategorySchema.validate(category, { abortEarly: false });
 
-        if (!response) throw new Error("Category not found");
-        if (data.error) throw new Error(data.error.details[0].message);
+        if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
+        if (data.error) throw mapJoiErrors(data.error.details);
 
         await this.categoryRepository.updateCategory(category);
     }
 
     async deleteCategory(id: number): Promise<void> {
-        const category = await this.categoryRepository.getCategoryById(id);
-        if (!category) throw new Error("Category not found");
+        const responseById = await this.categoryRepository.getCategoryById(id);
+
+        if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
+
         this.categoryRepository.deleteCategory(id);
     }
-
 }
