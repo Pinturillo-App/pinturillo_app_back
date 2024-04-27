@@ -13,7 +13,7 @@ export const wordCategoryCreateSchema = Joi.object({
             'string.empty': 'Word id cannot be empty.',
             'any.required': 'Word id is required.'
         }),
-    idCategory: Joi.string()
+    idCategory: Joi.number()
         .required()
         .messages({
             'string.empty': 'Category id cannot be empty.',

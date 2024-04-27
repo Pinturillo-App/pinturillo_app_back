@@ -4,7 +4,7 @@ import Joi from 'joi';
 export class CreateRoomDto {
     name: string;
     state: string;
-    idCategory: string;
+    idCategory: number;
 }
 
 export const createRoomSchema = Joi.object({
@@ -26,7 +26,7 @@ export const createRoomSchema = Joi.object({
             'any.only': 'Room state must be either "Sin iniciar", "En curso" or "Finalizado".',
             'any.required': 'Room state is required.'
         }),
-    idCategory: Joi.string()
+    idCategory: Joi.number()
         .required()
         .messages({
             'string.empty': 'Category id cannot be empty.',

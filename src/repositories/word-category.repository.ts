@@ -5,7 +5,7 @@ import { CreateWordCategoryDto } from '../dto/word-category';
 export class WordCategoryRepository{
     private repository = AppDataSource.getRepository(WordCategoryRepository);      
 
-    // async createWordCategory(wordCategory: CreateWordCategoryDto) {
+    // async saveWordCategory(wordCategory: CreateWordCategoryDto) {
     //     return this.repository.save(wordCategory);
     // }
 
