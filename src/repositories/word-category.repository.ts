@@ -4,7 +4,11 @@ import { WordCategory } from '../entities';
 
 
 export class WordCategoryRepository {
-    private repository = AppDataSource.getRepository(WordCategory);      
+    private repository = AppDataSource.getRepository(WordCategory);   
+    
+    async findWordCategoryById(id: number) {
+        return this.repository.findOneBy({ id });
+    }
 
     async saveWordCategory(wordCategory: CreateWordCategoryDto) {
         return this.repository.save(wordCategory);

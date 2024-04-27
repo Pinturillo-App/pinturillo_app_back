@@ -10,6 +10,6 @@ export class Category extends BaseEntity{
   @Column({ name: 'name', type: 'varchar', length: 50, nullable: false, unique: true })
   name: string;
   
-  @ManyToMany(() => Word, word => word.categories, { eager: true })
+  @ManyToMany(() => Word, word => word.categories)
   words?: Word[];
 }

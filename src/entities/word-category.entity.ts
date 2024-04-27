@@ -16,9 +16,9 @@ export class WordCategory extends BaseEntity {
 
   @ManyToOne(() => Word, { nullable: false })
   @JoinColumn({ name: 'id_word' , referencedColumnName: 'id'})
-  words: Word[];
+  words?: Word[];
 
   @ManyToOne(() => Category, { nullable: false })
   @JoinColumn({ name: 'id_category', referencedColumnName: 'id'})
-  categories: Category[];
+  categories?: Category[];
 }

@@ -14,9 +14,9 @@ export class Room extends BaseEntity{
   state: string;
   
   @Column({ name: 'id_category', nullable: false})
-  idCategory: string;
+  idCategory: number;
 
-  @ManyToOne(() => Category, {nullable: false})
+  @ManyToOne(() => Category, { nullable: false, eager: true })
   @JoinColumn({ name: "id_category"})
-  category?: Category;
+  categories?: Category[];
 }
