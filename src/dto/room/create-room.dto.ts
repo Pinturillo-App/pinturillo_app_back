@@ -29,7 +29,8 @@ export const createRoomSchema = Joi.object({
     idCategory: Joi.number()
         .required()
         .messages({
-            'string.empty': 'Category id cannot be empty.',
+            'number.empty': 'Category id cannot be empty.',
+            'number.base': 'Category id must be a number.',
             'any.required': 'Category id is required.'
         })
 }).options({ abortEarly: false });
