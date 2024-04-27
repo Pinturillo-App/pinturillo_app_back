@@ -21,7 +21,7 @@ export class CategoryService {
 
         if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
 
-        return await this.categoryRepository.findCategoryById(id);
+        return responseById;
     }
 
     async saveCategory(category: CreateCategoryDto): Promise<Category | undefined> {
