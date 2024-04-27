@@ -4,5 +4,3 @@ import { WordCategoryController } from './../controllers/word-category.controlle
 
 export const wordCategoryRouter = express.Router();
 const wordCategoryController = new WordCategoryController();
-
-export default wordCategoryRouter;

@@ -5,7 +5,6 @@ import { CATEGORY_ALREADY_EXISTS, CATEGORY_NOT_FOUND } from '../utilities/messag
 import { mapJoiErrors } from '../middlewares/validation-error.middleware';
 
 
-
 export class CategoryService {
     private categoryRepository: CategoryRepository;
     
@@ -22,7 +21,7 @@ export class CategoryService {
 
         if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
 
-        return await this.categoryRepository.findCategoryById(id);
+        return responseById;
     }
 
     async saveCategory(category: CreateCategoryDto): Promise<Category | undefined> {

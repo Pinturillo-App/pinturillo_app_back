@@ -21,7 +21,7 @@ export class WordService {
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
 
-        return await this.wordRepository.findWordById(id);
+        return await responseById;
     }
 
     async saveWord(word: CreateWordDto): Promise<Word | undefined> {
@@ -51,5 +51,4 @@ export class WordService {
 
         this.wordRepository.deleteWord(id);
     }
-    
 }

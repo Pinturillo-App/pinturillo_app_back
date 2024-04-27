@@ -5,7 +5,7 @@ export class UpdateRoomDto {
     id: number;
     name: string;
     state: string;
-    idCategory: string;
+    // idCategory: string;
 }
 
 export const updateRoomSchema = Joi.object({
@@ -31,9 +31,9 @@ export const updateRoomSchema = Joi.object({
             'any.only': 'Room state must be either "Sin iniciar", "En curso" or "Finalizado".',
             'any.required': 'Room state is required.'
         }),
-    idCategory: Joi.string()
-        .optional()
-        .messages({
-            'string.empty': 'Category id cannot be empty.'
-        })
+    // idCategory: Joi.string()
+    //      .optional()
+    //      .messages({
+    //          'string.empty': 'Category id cannot be empty.'
+    //      })
 }).options({ abortEarly: false });
