@@ -21,7 +21,7 @@ export class WordService {
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
 
-        return await responseById;
+        return responseById;
     }
 
     async saveWord(word: CreateWordDto): Promise<Word | undefined> {

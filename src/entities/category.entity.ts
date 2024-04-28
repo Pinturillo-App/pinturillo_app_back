@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, OneToMany, JoinTable } from 'typeorm';
 import { Word } from './word.entity';
 
 
@@ -10,6 +10,17 @@ export class Category extends BaseEntity{
   @Column({ name: 'name', type: 'varchar', length: 50, nullable: false, unique: true })
   name: string;
   
-  @ManyToMany(() => Word, word => word.categories, { eager: true })
+  @ManyToMany(() => Word, word => word.categories)
+  @JoinTable({
+    name: 'word_category',
+    joinColumn: {
+      name: 'id_category',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'id_word', 
+      referencedColumnName: 'id' 
+    }
+  })
   words?: Word[];
 }

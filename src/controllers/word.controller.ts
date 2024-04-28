@@ -64,7 +64,7 @@ export class WordController {
         try {
             await this.wordService.deleteWord(+id);
 
-            return res.status(OK_STATUS).json({ message: `Word with ${ id } deleted successfully` });
+            return res.status(OK_STATUS).json({ message: `Word with id: ${ id } deleted successfully` });
         } catch (error) {
             return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
         }

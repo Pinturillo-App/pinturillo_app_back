@@ -4,7 +4,6 @@ import { mapJoiErrors } from '../middlewares/validation-error.middleware';
 import { RoomRepository } from '../repositories/room.repository';
 import { ID_CATEGORY_NOT_FOUND, ROOM_NOT_FOUND } from '../utilities/messages.utility';
 import { CategoryRepository } from '../repositories/category.repository';
-import { updateCategorySchema } from '../dto/category';
 
 
 export class RoomService{
@@ -21,20 +20,19 @@ export class RoomService{
     }
 
     async getRoomById(id: number): Promise<Room | undefined>{
-
         const responseById = await this.roomRepository.getRoomById(id);
 
-        if( !responseById ) throw new Error( ROOM_NOT_FOUND );
+        if (!responseById) throw new Error(ROOM_NOT_FOUND);
+
         return responseById;
     }
 
     async saveRoom(room: CreateRoomDto ): Promise<Room | undefined>{
-        
-        const validateIdCategory = await this.categoryRepository.findCategoryById( room.idCategory );
+        const responseByIdCategory = await this.categoryRepository.findCategoryById(room.idCategory);
         const data = createRoomSchema.validate(room, { abortEarly: false });
 
-        if( !validateIdCategory ) throw new Error( ID_CATEGORY_NOT_FOUND );
-        if( data.error ) throw mapJoiErrors(data.error.details);
+        if (!responseByIdCategory) throw new Error(ID_CATEGORY_NOT_FOUND);
+        if (data.error) throw mapJoiErrors(data.error.details);
 
         return await this.roomRepository.createRoom(room);
     }
@@ -43,8 +41,8 @@ export class RoomService{
         const responseById = await this.roomRepository.getRoomById(room.id);
         const data = updateRoomSchema.validate(room, { abortEarly: false });
 
-        if( !responseById ) throw new Error( ROOM_NOT_FOUND );
-        if( data.error ) throw mapJoiErrors(data.error.details);
+        if (!responseById) throw new Error(ROOM_NOT_FOUND);
+        if (data.error) throw mapJoiErrors(data.error.details);
 
         await this.roomRepository.updateRoom(room);
     }
@@ -52,9 +50,8 @@ export class RoomService{
     async deleteRoom(id: number): Promise<void>{
         const responseById = await this.roomRepository.getRoomById(id);
 
-        if( !responseById ) throw new Error( ROOM_NOT_FOUND );
+        if (!responseById) throw new Error(ROOM_NOT_FOUND);
         
         this.roomRepository.deleteRoom(id);
     }
-    
 }

@@ -5,8 +5,8 @@ import { WordController } from './../controllers/word.controller';
 export const wordRouter = express.Router();
 const wordController = new WordController();
 
-wordRouter.get('/getAllWords', wordController.getAllWords);
-wordRouter.get('/getWordById/:id', wordController.findWordById);
-wordRouter.post('/createWord', wordController.saveWord);
-wordRouter.put('/updateWord', wordController.updateWord);
-wordRouter.delete('/deleteWord/:id', wordController.deleteWord);
+wordRouter.get('/getAll', wordController.getAllWords);
+wordRouter.get('/getById/:id', wordController.findWordById);
+wordRouter.post('/create', wordController.saveWord);
+wordRouter.put('/update', wordController.updateWord);
+wordRouter.delete('/delete/:id', wordController.deleteWord);
