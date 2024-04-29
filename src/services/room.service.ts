@@ -19,15 +19,15 @@ export class RoomService{
         return await this.roomRepository.getAllRooms();
     }
 
-    async getRoomById(id: number): Promise<Room | undefined>{
-        const responseById = await this.roomRepository.getRoomById(id);
+    async findRoomById(id: number): Promise<Room | undefined> {
+        const responseById = await this.roomRepository.findRoomById(id);
 
         if (!responseById) throw new Error(ROOM_NOT_FOUND);
 
         return responseById;
     }
 
-    async saveRoom(room: CreateRoomDto ): Promise<Room | undefined>{
+    async saveRoom(room: CreateRoomDto): Promise<Room> {
         const responseByIdCategory = await this.categoryRepository.findCategoryById(room.idCategory);
         const data = createRoomSchema.validate(room, { abortEarly: false });
 
@@ -37,18 +37,18 @@ export class RoomService{
         return await this.roomRepository.createRoom(room);
     }
 
-    async updateRoom(room: Room): Promise<void>{
-        const responseById = await this.roomRepository.getRoomById(room.id);
+    async updateRoom(room: Room): Promise<Room> {
+        const responseById = await this.roomRepository.findRoomById(room.id);
         const data = updateRoomSchema.validate(room, { abortEarly: false });
 
         if (!responseById) throw new Error(ROOM_NOT_FOUND);
         if (data.error) throw mapJoiErrors(data.error.details);
 
-        await this.roomRepository.updateRoom(room);
+        return await this.roomRepository.updateRoom(room);
     }
 
-    async deleteRoom(id: number): Promise<void>{
-        const responseById = await this.roomRepository.getRoomById(id);
+    async deleteRoom(id: number): Promise<void> {
+        const responseById = await this.roomRepository.findRoomById(id);
 
         if (!responseById) throw new Error(ROOM_NOT_FOUND);
         

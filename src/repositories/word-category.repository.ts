@@ -19,7 +19,11 @@ export class WordCategoryRepository {
     }
 
     async updateWordCategory(wordCategory: UpdateWordCategoryDto) {
-        return this.repository.update(wordCategory.id, wordCategory);
+        const { id, ...updateData } = wordCategory;
+
+        await this.repository.update({ id }, updateData);
+        
+        return this.findWordCategoryById(id);
     }
 
     async deleteWordCategory(id: number) {

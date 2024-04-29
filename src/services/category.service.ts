@@ -24,7 +24,7 @@ export class CategoryService {
         return responseById;
     }
 
-    async saveCategory(category: CreateCategoryDto): Promise<Category | undefined> {
+    async saveCategory(category: CreateCategoryDto): Promise<Category> {
         const responseByName = await this.categoryRepository.findCategoryByName(category.name);
         const data = createCategorySchema.validate(category, { abortEarly: false });
 
@@ -34,14 +34,14 @@ export class CategoryService {
         return await this.categoryRepository.saveCategory(category);
     }
 
-    async updateCategory(category: UpdateCategoryDto): Promise<void> {
+    async updateCategory(category: UpdateCategoryDto): Promise<Category> {
         const responseById = await this.categoryRepository.findCategoryById(category.id);
         const data = updateCategorySchema.validate(category, { abortEarly: false });
 
         if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
         if (data.error) throw mapJoiErrors(data.error.details);
 
-        await this.categoryRepository.updateCategory(category);
+        return await this.categoryRepository.updateCategory(category);
     }
 
     async deleteCategory(id: number): Promise<void> {

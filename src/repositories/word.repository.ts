@@ -23,7 +23,11 @@ export class WordRepository{
     }
 
     async updateWord(word: UpdateWordDto) {
-        return this.repository.update(word.id, word);
+        const { id, ...updateData } = word;
+
+        await this.repository.update({ id }, updateData);
+        
+        return this.findWordById(id);
     }
 
     async deleteWord(id: number) {

@@ -10,7 +10,7 @@ export class RoomRepository{
         return this.repository.find();
     }
 
-    async getRoomById(id: number) {
+    async findRoomById(id: number) {
         return this.repository.findOneBy({ id });
     }      
 
@@ -19,7 +19,11 @@ export class RoomRepository{
     }
 
     async updateRoom(room: UpdateRoomDto) {
-        return this.repository.update(room.id, room);
+        const { id, ...updateData } = room;
+
+        await this.repository.update({ id }, updateData);
+        
+        return this.findRoomById(id);
     }
 
     async deleteRoom(id: number) {
