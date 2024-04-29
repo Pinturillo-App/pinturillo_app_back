@@ -244,7 +244,7 @@ const options = {
             },
         ],
         paths: {
-            '/category': {
+            '/category/getAll': {
                 get: {
                     tags: ['category'],
                     summary: 'Get all categories',
@@ -268,6 +268,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/category/findById/{categoryId}': {
                 get: {
                     tags: ['category'],
                     summary: 'Find category by id',
@@ -302,6 +304,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/category/create': {
                 post: {
                     tags: ['category'],
                     summary: 'Create a new category',
@@ -325,6 +329,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/category/update': {
                 put: {
                     tags: ['category'],
                     summary: 'Update a category',
@@ -348,6 +354,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/category/delete/{categoryId}': {
                 delete: {
                     tags: ['category'],
                     summary: 'Delete a category',
@@ -373,7 +381,7 @@ const options = {
                     },
                 },
             },
-            '/room': {
+            '/room/getAll': {
                 get: {
                     tags: ['room'],
                     summary: 'Get all rooms',
@@ -397,6 +405,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/room/findById/{roomId}': {
                 get: {
                     tags: ['room'],
                     summary: 'Find room by id',
@@ -431,6 +441,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/room/create': {
                 post: {
                     tags: ['room'],
                     summary: 'Create a new room',
@@ -455,6 +467,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/room/update': {
                 put: {
                     tags: ['room'],
                     summary: 'Update a room',
@@ -476,31 +490,33 @@ const options = {
                     },
                 },
             },
-            delete: {
-                tags: ['room'],
-                summary: 'Delete a room',
-                description: 'Endpoint to delete an existing room.',
-                parameters: [
-                    {
-                        name: 'roomId',
-                        in: 'path',
-                        required: true,
-                        description: 'Id of the room to delete.',
-                        schema: {
-                            type: 'integer',
+            '/room/delete/{roomId}': {
+                delete: {
+                    tags: ['room'],
+                    summary: 'Delete a room',
+                    description: 'Endpoint to delete an existing room.',
+                    parameters: [
+                        {
+                            name: 'roomId',
+                            in: 'path',
+                            required: true,
+                            description: 'Id of the room to delete.',
+                            schema: {
+                                type: 'integer',
+                            },
                         },
-                    },
-                ],
-                responses: {
-                    200: {
-                        description: 'Room deleted.',
-                    },
-                    500: {
-                        description: 'Internal server error.',
+                    ],
+                    responses: {
+                        200: {
+                            description: 'Room deleted.',
+                        },
+                        500: {
+                            description: 'Internal server error.',
+                        },
                     },
                 },
             },
-            '/word': {
+            '/word/getAll': {
                 get: {
                     tags: ['word'],
                     summary: 'Get all words',
@@ -524,6 +540,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/word/findById/{wordId}': {
                 get: {
                     tags: ['word'],
                     summary: 'Find word by id',
@@ -558,6 +576,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/word/create': {
                 post: {
                     tags: ['word'],
                     summary: 'Create a new word',
@@ -581,6 +601,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/word/update': {
                 put: {
                     tags: ['word'],
                     summary: 'Update a word',
@@ -604,6 +626,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/word/delete/{wordId}': { 
                 delete: {
                     tags: ['word'],
                     summary: 'Delete a word',
@@ -629,7 +653,7 @@ const options = {
                     },
                 },
             },
-            '/wordCategory': {
+            '/wordCategory/getAll': {
                 get: {
                     tags: ['wordCategory'],
                     summary: 'Get all word categories',
@@ -653,6 +677,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/wordCategory/findById/{wordCategoryId}': {
                 get: {
                     tags: ['wordCategory'],
                     summary: 'Find word category by id',
@@ -687,6 +713,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/wordCategory/create': {
                 post: {
                     tags: ['wordCategory'],
                     summary: 'Create a new word category',
@@ -710,6 +738,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/wordCategory/update': {
                 put: {
                     tags: ['wordCategory'],
                     summary: 'Update a word category',
@@ -733,6 +763,8 @@ const options = {
                         },
                     },
                 },
+            },
+            '/wordCategory/delete/{wordCategoryId}': {
                 delete: {
                     tags: ['wordCategory'],
                     summary: 'Delete a word category',

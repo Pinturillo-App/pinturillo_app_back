@@ -9,13 +9,16 @@ export class CreateRoomDto {
 
 export const createRoomSchema = Joi.object({
     name: Joi.string()
+        .trim() 
+        .required()
         .min(3)
         .max(50)
-        .required()
+        .pattern(new RegExp('^[a-zA-Z ]*$')) 
         .messages({
             'string.empty': 'Room name cannot be empty.',
             'string.min': 'Room name must be at least {#limit} characters long.',
             'string.max': 'Room name cannot exceed {#limit} characters.',
+            'string.pattern.base': 'Room name must only contain letters and spaces.',
             'any.required': 'Room name is required.'
         }),
     state: Joi.string()

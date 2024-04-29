@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, OneToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable } from 'typeorm';
 import { Word } from './word.entity';
 
 
