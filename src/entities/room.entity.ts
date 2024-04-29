@@ -13,10 +13,10 @@ export class Room extends BaseEntity {
   @Column({ name: 'state', type: 'varchar', default: 'Sin iniciar' })
   state: string;
   
-  // @Column({ name: 'id_category', nullable: false})
-  // idCategory: number;
+  @Column({ name: 'id_category', nullable: false })
+  idCategory: number;
 
   @ManyToOne(() => Category, { nullable: false, eager: true })
-  @JoinColumn({ name: "id_category"})
+  @JoinColumn({ name: "id_category" })
   categories?: Category[];
 }
