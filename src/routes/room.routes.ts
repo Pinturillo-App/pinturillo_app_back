@@ -6,7 +6,7 @@ export const roomRouter = express.Router();
 const roomController = new RoomController();
 
 roomRouter.get('/getAll', roomController.getAllRooms);
-roomRouter.get('/getById/:id', roomController.findRoomById);
+roomRouter.get('/findById/:id', roomController.findRoomById);
 roomRouter.post('/create', roomController.saveRoom);
 roomRouter.put('/update', roomController.updateRoom);
 roomRouter.delete('/delete/:id', roomController.deleteRoom);

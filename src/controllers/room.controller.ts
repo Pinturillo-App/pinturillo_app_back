@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { RoomService } from "../services/room.service";
-import { BAD_REQUEST_STATUS, OK_STATUS } from '../utilities/status.utility';
+import { BAD_REQUEST_STATUS, CONFLICT_STATUS, CREATED_STATUS, NOT_FOUND_STATUS, OK_STATUS } from '../utilities/status.utility';
 
 
 export class RoomController {
@@ -14,11 +14,11 @@ export class RoomController {
         const { id } = req.params;
 
         try {
-            const room = await this.roomService.getRoomById(+id);
+            const room = await this.roomService.findRoomById(+id);
 
             return res.status(OK_STATUS).json(room);
         } catch (error) {
-            return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }
     }
 
@@ -38,10 +38,10 @@ export class RoomController {
         try {
             await this.roomService.saveRoom(room);
 
-            return res.status(OK_STATUS).json(room);
+            return res.status(CREATED_STATUS).json(room);
         } catch (error) {
             if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
-            else return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(CONFLICT_STATUS).json({ error: error.message });
         }
     }
 
@@ -54,7 +54,7 @@ export class RoomController {
             return res.status(OK_STATUS).json(room);
         } catch (error) {
             if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
-            else return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }
     }
 
@@ -66,7 +66,7 @@ export class RoomController {
 
             return res.status(OK_STATUS).json({ message: `Room with id: ${ id } deleted successfully` });
         } catch (error) {
-            return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }
     }
 }

@@ -8,9 +8,13 @@ export class UpdateWordDto {
 
 export const updateWordSchema = Joi.object({
     id: Joi.number()
+        .integer()
+        .positive()
         .required()
         .messages({
-            'string.empty': 'Word id cannot be empty.',
+            'number.base': 'Word id must be a number.',
+            'number.integer': 'Word id must be an integer.',
+            'number.positive': 'Word id must be a positive number.',
             'any.required': 'Word id is required.'
         }),
     text: Joi.string()
