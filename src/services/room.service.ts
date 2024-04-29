@@ -29,7 +29,7 @@ export class RoomService{
 
     async saveRoom(room: CreateRoomDto): Promise<Room> {
         const responseByIdCategory = await this.categoryRepository.findCategoryById(room.idCategory);
-        const data = createRoomSchema.validate(room, { abortEarly: false });
+        const data = createRoomSchema.validate(room);
 
         if (!responseByIdCategory) throw new Error(ID_CATEGORY_NOT_FOUND);
         if (data.error) throw mapJoiErrors(data.error.details);
@@ -39,7 +39,7 @@ export class RoomService{
 
     async updateRoom(room: Room): Promise<Room> {
         const responseById = await this.roomRepository.findRoomById(room.id);
-        const data = updateRoomSchema.validate(room, { abortEarly: false });
+        const data = updateRoomSchema.validate(room);
 
         if (!responseById) throw new Error(ROOM_NOT_FOUND);
         if (data.error) throw mapJoiErrors(data.error.details);

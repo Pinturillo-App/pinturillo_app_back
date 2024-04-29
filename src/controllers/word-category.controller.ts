@@ -64,7 +64,7 @@ export class WordCategoryController {
         try {
             await this.wordCategoryService.deleteWordCategory(id);
 
-            return res.status(OK_STATUS).json({ message: `Word category with id: ${ id } deleted successfully` });
+            return res.status(OK_STATUS).json({ message: `Word category with id: ${ id } deleted successfully.` });
         } catch (error) {
             return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }

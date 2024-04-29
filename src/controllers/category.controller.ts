@@ -64,7 +64,7 @@ export class CategoryController {
         try {
             await this.categoryService.deleteCategory(+id);
 
-            return res.status(OK_STATUS).json({ message: `Category with id: ${ id } deleted successfully` });
+            return res.status(OK_STATUS).json({ message: `Category with id: ${ id } deleted successfully.` });
         } catch (error) {
             return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }

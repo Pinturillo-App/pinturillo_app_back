@@ -64,7 +64,7 @@ export class RoomController {
         try {
             await this.roomService.deleteRoom(+id);
 
-            return res.status(OK_STATUS).json({ message: `Room with id: ${ id } deleted successfully` });
+            return res.status(OK_STATUS).json({ message: `Room with id: ${ id } deleted successfully.` });
         } catch (error) {
             return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }

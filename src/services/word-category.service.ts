@@ -33,7 +33,7 @@ export class WordCategoryService {
     async saveWordCategory(wordCategory: CreateWordCategoryDto): Promise<WordCategory> {
         const responseByIdWord = await this.wordRepository.findWordById(wordCategory.idWord);
         const responseByIdCategory = await this.categoryRepository.findCategoryById(wordCategory.idCategory);
-        const data = createWordCategorySchema.validate(wordCategory, { abortEarly: false });
+        const data = createWordCategorySchema.validate(wordCategory);
 
         if (data.error) throw mapJoiErrors(data.error.details);
         if (!responseByIdWord) throw new Error(WORD_NOT_FOUND);
@@ -46,7 +46,7 @@ export class WordCategoryService {
         const responseById = await this.wordCategoryRepository.findWordCategoryById(wordCategory.id);
         const responseByIdWord = await this.wordRepository.findWordById(wordCategory.idWord);
         const responseByIdCategory = await this.categoryRepository.findCategoryById(wordCategory.idCategory);
-        const data = createWordCategorySchema.validate(wordCategory, { abortEarly: false });
+        const data = createWordCategorySchema.validate(wordCategory);
 
         if (data.error) throw mapJoiErrors(data.error.details);
         if (!responseById) throw new Error(WORD_CATEGORY_NOT_FOUND);
