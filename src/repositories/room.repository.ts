@@ -29,4 +29,8 @@ export class RoomRepository{
     async deleteRoom(id: number) {
         return this.repository.delete(id);
     }
+
+    async findRoomByIdCategory(idCategory: number) {
+        return this.repository.find({ where: { idCategory }});
+    }
 }
