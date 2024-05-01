@@ -3,14 +3,14 @@ import { Category } from './category.entity';
 
 
 @Entity({ name: 'word' })
-export class Word extends BaseEntity{
+export class Word extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ name: 'text', type: 'varchar', length: 50, nullable: false })
   text: string;
 
-  @ManyToMany(() => Category, category => category.words)
+  @ManyToMany(() => Category, category => category.words, { eager: true })
   @JoinTable({
     name: 'word_category',
     joinColumn: {

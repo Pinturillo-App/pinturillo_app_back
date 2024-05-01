@@ -23,7 +23,11 @@ export class CategoryRepository{
     }
 
     async updateCategory(category: UpdateCategoryDto) {
-        return this.repository.update(category.id, category);
+        const { id, ...updateData } = category;
+
+        await this.repository.update({ id }, updateData);
+        
+        return this.findCategoryById(id);
     }
 
     async deleteCategory(id: number) {

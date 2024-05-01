@@ -10,18 +10,27 @@ export class UpdateRoomDto {
 
 export const updateRoomSchema = Joi.object({
     id: Joi.number()
+        .integer()
+        .positive()
         .required()
         .messages({
-            'string.empty': 'Room id cannot be empty.',
+            'number.base': 'Room id must be a number.',
+            'number.integer': 'Room id must be an integer.',
+            'number.positive': 'Room id must be a positive number.',
             'any.required': 'Room id is required.'
         }),
     name: Joi.string()
+        .trim() 
+        .required()
         .min(3)
         .max(50)
-        .optional()
+        .pattern(new RegExp('^[a-zA-Z ]*$')) 
         .messages({
+            'string.empty': 'Room name cannot be empty.',
             'string.min': 'Room name must be at least {#limit} characters long.',
-            'string.max': 'Room name cannot exceed {#limit} characters.'
+            'string.max': 'Room name cannot exceed {#limit} characters.',
+            'string.pattern.base': 'Room name must only contain letters and spaces.',
+            'any.required': 'Room name is required.'
         }),
     state: Joi.string()
         .optional()
@@ -32,8 +41,13 @@ export const updateRoomSchema = Joi.object({
             'any.required': 'Room state is required.'
         }),
     idCategory: Joi.number()
-        .optional()
+        .integer()
+        .positive()
+        .required()
         .messages({
-            'string.empty': 'Category id cannot be empty.'
-        })
+            'number.base': 'Category id must be a number.',
+            'number.integer': 'Category id must be an integer.',
+            'number.positive': 'Category id must be a positive number.',
+            'any.required': 'Category id is required.'
+        }),
 }).options({ abortEarly: false });
