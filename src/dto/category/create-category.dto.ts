@@ -11,7 +11,7 @@ export const createCategorySchema = Joi.object({
         .required()
         .min(3)
         .max(50)
-        .pattern(new RegExp('^[a-zA-Z ]*$')) 
+        .pattern(new RegExp('^[a-zA-Z ]*$'))
         .messages({
             'string.empty': 'Category name cannot be empty.',
             'string.min': 'Category name must be at least {#limit} characters long.',

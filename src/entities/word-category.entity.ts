@@ -4,21 +4,21 @@ import { Category } from './category.entity';
 
 
 @Entity({ name: 'word_category' })
-export class WordCategory extends BaseEntity{
+export class WordCategory extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ name: 'id_word', nullable: false })
-  idWord: string;
+  idWord: number;
 
   @Column({ name: 'id_category', nullable: false })
-  idCategory: string;
+  idCategory: number;
 
   @ManyToOne(() => Word, { nullable: false })
   @JoinColumn({ name: 'id_word' , referencedColumnName: 'id'})
-  words: Word[];
+  words?: Word[];
 
   @ManyToOne(() => Category, { nullable: false })
   @JoinColumn({ name: 'id_category', referencedColumnName: 'id'})
-  categories: Category[];
+  categories?: Category[];
 }

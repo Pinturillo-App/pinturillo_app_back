@@ -2,5 +2,5 @@ export class Category {
     id: number;
     name: string;
     state: string;
-    idCategory: string;
+    idCategory: number;
 }

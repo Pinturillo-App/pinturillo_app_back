@@ -21,12 +21,12 @@ export class WordService {
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
 
-        return await responseById;
+        return responseById;
     }
 
-    async saveWord(word: CreateWordDto): Promise<Word | undefined> {
+    async saveWord(word: CreateWordDto): Promise<Word> {
         const responseByName = await this.wordRepository.findWordByText(word.text);
-        const data = createWordSchema.validate(word, { abortEarly: false });
+        const data = createWordSchema.validate(word);
 
         if (data.error) throw mapJoiErrors(data.error.details);
         if (responseByName) throw new Error(WORD_ALREADY_EXISTS);
@@ -34,14 +34,14 @@ export class WordService {
         return await this.wordRepository.saveWord(word);
     }
 
-    async updateWord(word: UpdateWordDto): Promise<void> {
+    async updateWord(word: UpdateWordDto): Promise<Word> {
         const responseById = await this.wordRepository.findWordById(word.id);
-        const data = updateWordSchema.validate(word, { abortEarly: false });
+        const data = updateWordSchema.validate(word);
 
         if (data.error) throw mapJoiErrors(data.error.details);
         if (!responseById) throw new Error(WORD_NOT_FOUND);
 
-        await this.wordRepository.updateWord(word);
+        return await this.wordRepository.updateWord(word);
     }
 
     async deleteWord(id: number): Promise<void> {

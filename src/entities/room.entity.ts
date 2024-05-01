@@ -3,7 +3,7 @@ import { Category } from './category.entity';
 
 
 @Entity({ name: 'room' })
-export class Room extends BaseEntity{
+export class Room extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -13,10 +13,10 @@ export class Room extends BaseEntity{
   @Column({ name: 'state', type: 'varchar', default: 'Sin iniciar' })
   state: string;
   
-  @Column({ name: 'id_category', nullable: false})
+  @Column({ name: 'id_category', nullable: false })
   idCategory: number;
 
-  @ManyToOne(() => Category, {nullable: false, eager: true})
-  @JoinColumn({ name: "id_category"})
-  category?: Category;
+  @ManyToOne(() => Category, { nullable: false, eager: true })
+  @JoinColumn({ name: "id_category" })
+  categories?: Category[];
 }

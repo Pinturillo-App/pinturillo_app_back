@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { WordService } from "../services/word.service";
-import { BAD_REQUEST_STATUS, CREATED_STATUS, OK_STATUS } from '../utilities/status.utility';
+import { BAD_REQUEST_STATUS, CONFLICT_STATUS, CREATED_STATUS, NOT_FOUND_STATUS, OK_STATUS } from '../utilities/status.utility';
 
 
 export class WordController {
@@ -18,7 +18,7 @@ export class WordController {
 
             return res.status(OK_STATUS).json(word);
         } catch (error) {
-            return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }
     }
 
@@ -41,7 +41,7 @@ export class WordController {
             return res.status(CREATED_STATUS).json(word);
         } catch (error) {
             if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
-            else return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(CONFLICT_STATUS).json({ error: error.message });
         }
     }
 
@@ -54,7 +54,7 @@ export class WordController {
             return res.status(OK_STATUS).json(word);
         } catch (error) {
             if (!error.message) return res.status(BAD_REQUEST_STATUS).json(error);
-            else return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }
     }
 
@@ -64,9 +64,9 @@ export class WordController {
         try {
             await this.wordService.deleteWord(+id);
 
-            return res.status(OK_STATUS).json({ message: `Word with ${ id } deleted successfully` });
+            return res.status(OK_STATUS).json({ message: `Word with id: ${ id } deleted successfully.` });
         } catch (error) {
-            return res.status(BAD_REQUEST_STATUS).json({ error: error.message });
+            return res.status(NOT_FOUND_STATUS).json({ error: error.message });
         }
     }
 }
