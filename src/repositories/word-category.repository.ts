@@ -29,4 +29,12 @@ export class WordCategoryRepository {
     async deleteWordCategory(id: number) {
         return this.repository.delete(id);
     }
+
+    async findCategoryByIdWord( idWord: number ) {
+        return this.repository.find({ where: { idWord }});
+    }
+
+    async findWordByIdCategory( idCategory: number ) {
+        return this.repository.find({ where: { idCategory }});
+    }
 }

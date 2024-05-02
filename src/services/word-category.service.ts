@@ -1,4 +1,4 @@
-import { CreateWordCategoryDto, createWordCategorySchema, updateWordCategorySchema, UpdateWordCategoryDto } from '../dto/word-category';
+import { CreateWordCategoryDto, createWordCategorySchema, UpdateWordCategoryDto, updateWordCategorySchema } from '../dto/word-category';
 import { WordCategory } from '../entities';
 import { mapJoiErrors } from '../middlewares/validation-error.middleware';
 import { CategoryRepository } from '../repositories/category.repository';
