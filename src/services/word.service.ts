@@ -11,7 +11,7 @@ export class WordService {
     private wordCategoryRepository: WordCategoryRepository;
     
     constructor() {
-        this.wordRepository         = new WordRepository();
+        this.wordRepository = new WordRepository();
         this.wordCategoryRepository = new WordCategoryRepository();
     }
 

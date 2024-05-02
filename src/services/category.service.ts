@@ -8,13 +8,13 @@ import { WordCategoryRepository } from '../repositories/word-category.repository
 
 
 export class CategoryService {
-    private categoryRepository      : CategoryRepository;
-    private roomRepository          : RoomRepository;
-    private wordCategoryRepository  : WordCategoryRepository;
+    private categoryRepository: CategoryRepository;
+    private roomRepository: RoomRepository;
+    private wordCategoryRepository: WordCategoryRepository;
 
     constructor() {
-        this.categoryRepository     = new CategoryRepository();
-        this.roomRepository         = new RoomRepository();
+        this.categoryRepository = new CategoryRepository();
+        this.roomRepository = new RoomRepository();
         this.wordCategoryRepository = new WordCategoryRepository();
     }
 

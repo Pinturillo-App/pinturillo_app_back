@@ -6,20 +6,20 @@ import { ID_CATEGORY_NOT_FOUND, ROOM_NOT_FOUND } from '../utilities/messages.uti
 import { CategoryRepository } from '../repositories/category.repository';
 
 
-export class RoomService{
+export class RoomService {
     private roomRepository: RoomRepository;
     private categoryRepository: CategoryRepository;
 
-    constructor(){
+    constructor() {
         this.roomRepository = new RoomRepository();
         this.categoryRepository = new CategoryRepository();
     }
 
-    async getAllRooms(): Promise<Room[]>{
+    async getAllRooms(): Promise<Room[]> {
         return await this.roomRepository.getAllRooms();
     }
 
-    async getWordsByRoom(id: number){
+    async getWordsByRoom(id: number) {
         const room = await this.roomRepository.findRoomById(id);
 
         if (!room) throw new Error(ROOM_NOT_FOUND);
