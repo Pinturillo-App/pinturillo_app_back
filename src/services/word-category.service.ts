@@ -1,4 +1,4 @@
-import { CreateWordCategoryDto, createWordCategorySchema, UpdateWordCategoryDto } from '../dto/word-category';
+import { CreateWordCategoryDto, createWordCategorySchema, updateWordCategorySchema, UpdateWordCategoryDto } from '../dto/word-category';
 import { WordCategory } from '../entities';
 import { mapJoiErrors } from '../middlewares/validation-error.middleware';
 import { CategoryRepository } from '../repositories/category.repository';
@@ -46,7 +46,7 @@ export class WordCategoryService {
         const responseById = await this.wordCategoryRepository.findWordCategoryById(wordCategory.id);
         const responseByIdWord = await this.wordRepository.findWordById(wordCategory.idWord);
         const responseByIdCategory = await this.categoryRepository.findCategoryById(wordCategory.idCategory);
-        const data = createWordCategorySchema.validate(wordCategory);
+        const data = updateWordCategorySchema.validate(wordCategory);
 
         if (data.error) throw mapJoiErrors(data.error.details);
         if (!responseById) throw new Error(WORD_CATEGORY_NOT_FOUND);

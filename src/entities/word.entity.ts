@@ -10,7 +10,7 @@ export class Word extends BaseEntity {
   @Column({ name: 'text', type: 'varchar', length: 50, nullable: false })
   text: string;
 
-  @ManyToMany(() => Category, category => category.words, { eager: true })
+  @ManyToMany(() => Category, category => category.words)
   @JoinTable({
     name: 'word_category',
     joinColumn: {

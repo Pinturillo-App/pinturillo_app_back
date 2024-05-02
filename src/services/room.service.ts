@@ -19,6 +19,14 @@ export class RoomService{
         return await this.roomRepository.getAllRooms();
     }
 
+    async getWordsByRoom(id: number){
+        const room = await this.roomRepository.findRoomById(id);
+
+        if (!room) throw new Error(ROOM_NOT_FOUND);
+
+        return room.categories['words'];
+    }
+
     async findRoomById(id: number): Promise<Room | undefined> {
         const responseById = await this.roomRepository.findRoomById(id);
 
