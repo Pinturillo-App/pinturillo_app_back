@@ -3,22 +3,26 @@ import { CreateRoomDto, UpdateRoomDto } from '../dto/room';
 import { Room } from '../entities';
 
 
-export class RoomRepository{
+export class RoomRepository {
     private repository = AppDataSource.getRepository(Room);
 
-    async getAllRooms() {
+    public getAllRooms = async () => {
         return this.repository.find();
     }
 
-    async findRoomById(id: number) {
+    public findRoomById = async (id: number) => {
         return this.repository.findOneBy({ id });
     }      
 
-    async createRoom(room: CreateRoomDto) {
+    public findRoomByIdCategory = async (idCategory: number) => {
+        return this.repository.find({ where: { idCategory }});
+    }
+
+    public createRoom = async (room: CreateRoomDto) => {
         return this.repository.save(room);
     }
 
-    async updateRoom(room: UpdateRoomDto) {
+    public updateRoom = async (room: UpdateRoomDto) => {
         const { id, ...updateData } = room;
 
         await this.repository.update({ id }, updateData);
@@ -26,11 +30,7 @@ export class RoomRepository{
         return this.findRoomById(id);
     }
 
-    async deleteRoom(id: number) {
+    public deleteRoom = async (id: number) => {
         return this.repository.delete(id);
-    }
-
-    async findRoomByIdCategory(idCategory: number) {
-        return this.repository.find({ where: { idCategory }});
     }
 }

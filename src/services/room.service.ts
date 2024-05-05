@@ -1,5 +1,5 @@
 import { CreateRoomDto, createRoomSchema, updateRoomSchema } from '../dto/room';
-import { Room } from '../entities';
+import { Room, Word } from '../entities';
 import { mapJoiErrors } from '../middlewares/validation-error.middleware';
 import { RoomRepository } from '../repositories/room.repository';
 import { ID_CATEGORY_NOT_FOUND, ROOM_NOT_FOUND } from '../utilities/messages.utility';
@@ -15,11 +15,11 @@ export class RoomService {
         this.categoryRepository = new CategoryRepository();
     }
 
-    async getAllRooms(): Promise<Room[]> {
+    public getAllRooms = async (): Promise<Room[]> => {
         return await this.roomRepository.getAllRooms();
     }
 
-    async getWordsByRoom(id: number) {
+    public getWordsByRoom = async (id: number): Promise<Word[]> => {
         const room = await this.roomRepository.findRoomById(id);
 
         if (!room) throw new Error(ROOM_NOT_FOUND);
@@ -27,7 +27,7 @@ export class RoomService {
         return room.categories['words'];
     }
 
-    async findRoomById(id: number): Promise<Room | undefined> {
+    public findRoomById = async (id: number): Promise<Room | undefined> => {
         const responseById = await this.roomRepository.findRoomById(id);
 
         if (!responseById) throw new Error(ROOM_NOT_FOUND);
@@ -35,7 +35,7 @@ export class RoomService {
         return responseById;
     }
 
-    async saveRoom(room: CreateRoomDto): Promise<Room> {
+    public saveRoom = async (room: CreateRoomDto): Promise<Room> => {
         const responseByIdCategory = await this.categoryRepository.findCategoryById(room.idCategory);
         const data = createRoomSchema.validate(room);
 
@@ -45,7 +45,7 @@ export class RoomService {
         return await this.roomRepository.createRoom(room);
     }
 
-    async updateRoom(room: Room): Promise<Room> {
+    public updateRoom = async (room: Room): Promise<Room> => {
         const responseById = await this.roomRepository.findRoomById(room.id);
         const data = updateRoomSchema.validate(room);
 
@@ -55,7 +55,7 @@ export class RoomService {
         return await this.roomRepository.updateRoom(room);
     }
 
-    async deleteRoom(id: number): Promise<void> {
+    public deleteRoom = async (id: number): Promise<void> => {
         const responseById = await this.roomRepository.findRoomById(id);
 
         if (!responseById) throw new Error(ROOM_NOT_FOUND);

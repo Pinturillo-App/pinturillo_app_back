@@ -3,26 +3,26 @@ import { CreateCategoryDto, UpdateCategoryDto } from '../dto/category';
 import { Category } from '../entities';
 
 
-export class CategoryRepository{
+export class CategoryRepository {
     private repository = AppDataSource.getRepository(Category);
 
-    async getAllCategories() {
+    public getAllCategories = async () => {
         return this.repository.find();
     }
 
-    async findCategoryById(id: number) {
+    public findCategoryById = async (id: number) => {
         return this.repository.findOneBy({ id });
     }
 
-    async findCategoryByName(name: string) {
+    public findCategoryByName = async (name: string) => {
         return this.repository.findOneBy({ name });
     }
 
-    async saveCategory(category: CreateCategoryDto) {
+    public saveCategory = async (category: CreateCategoryDto) => {
         return this.repository.save(category);
     }
 
-    async updateCategory(category: UpdateCategoryDto) {
+    public updateCategory = async (category: UpdateCategoryDto) => {
         const { id, ...updateData } = category;
 
         await this.repository.update({ id }, updateData);
@@ -30,7 +30,7 @@ export class CategoryRepository{
         return this.findCategoryById(id);
     }
 
-    async deleteCategory(id: number) {
+    public deleteCategory = async (id: number) => {
         return this.repository.delete(id);
     }
 }
