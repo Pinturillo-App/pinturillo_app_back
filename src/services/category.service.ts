@@ -56,8 +56,8 @@ export class CategoryService {
         const responseWordByIdCategory = await this.wordCategoryRepository.findWordByIdCategory(id);
 
         if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
-        if( responseRoomByIdCategory.length > 0 ) throw new Error(CATEGORY_ALREADY_USED_IN_ROOM);
-        if( responseWordByIdCategory.length > 0 ) throw new Error(CATEGORY_ALREADY_USED_IN_WORD);
+        if (responseRoomByIdCategory.length > 0) throw new Error(CATEGORY_ALREADY_USED_IN_ROOM);
+        if (responseWordByIdCategory.length > 0) throw new Error(CATEGORY_ALREADY_USED_IN_WORD);
 
         this.categoryRepository.deleteCategory(id);
     }
