@@ -5,7 +5,7 @@ interface ValidationErrors {
     [key: string]: string;
 }
 
-export function mapJoiErrors(errors: ValidationErrorItem[]): ValidationErrors {
+export const mapJoiErrors = (errors: ValidationErrorItem[]): ValidationErrors => {
     const mappedErrors: ValidationErrors = {};
 
     errors.forEach((error) => {

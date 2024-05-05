@@ -6,19 +6,19 @@ import { WordCategory } from '../entities';
 export class WordCategoryRepository {
     private repository = AppDataSource.getRepository(WordCategory);   
 
-    async getAllWordCategories() {
+    getAllWordCategories = async () => {
         return this.repository.find();
     }
     
-    async findWordCategoryById(id: number) {
+    findWordCategoryById = async (id: number) => {
         return this.repository.findOneBy({ id });
     }
 
-    async saveWordCategory(wordCategory: CreateWordCategoryDto) {
+    saveWordCategory = async (wordCategory: CreateWordCategoryDto) => {
         return this.repository.save(wordCategory);
     }
 
-    async updateWordCategory(wordCategory: UpdateWordCategoryDto) {
+    updateWordCategory = async (wordCategory: UpdateWordCategoryDto) => {
         const { id, ...updateData } = wordCategory;
 
         await this.repository.update({ id }, updateData);
@@ -26,15 +26,15 @@ export class WordCategoryRepository {
         return this.findWordCategoryById(id);
     }
 
-    async deleteWordCategory(id: number) {
+    deleteWordCategory = async (id: number) => {
         return this.repository.delete(id);
     }
 
-    async findCategoryByIdWord( idWord: number ) {
+    findCategoryByIdWord = async (idWord: number) => {
         return this.repository.find({ where: { idWord }});
     }
 
-    async findWordByIdCategory( idCategory: number ) {
+    findWordByIdCategory = async (idCategory: number) => {
         return this.repository.find({ where: { idCategory }});
     }
 }

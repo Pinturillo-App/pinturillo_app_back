@@ -28,7 +28,7 @@ export class Server {
         this.initializeDataSource();
     }
 
-    private initializeMiddleware(): void {
+    private initializeMiddleware = (): void => {
         this.app.use(cors());
         this.app.use(express.static('public'));
         this.app.use(express.json());
@@ -36,7 +36,7 @@ export class Server {
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     }
 
-    private initializeRoutes(): void {      
+    private initializeRoutes = (): void => {      
         this.app.use(`${ this.path }/category`, categoryRouter);
         this.app.use(`${ this.path }/room`, roomRouter);
         this.app.use(`${ this.path }/wordCategory`, wordCategoryRouter);
@@ -44,7 +44,7 @@ export class Server {
         setupSocketRoutes(this.path, this.app, this.expressWsInstance);
     }
 
-    private async initializeDataSource(): Promise<void> {
+    private initializeDataSource = async (): Promise<void> => {
         try {
             await AppDataSource.initialize();
             console.log('Data Source has been initialized!');
@@ -53,7 +53,7 @@ export class Server {
         }
     }
 
-    public startServer(): void {
+    public startServer = (): void => {
         this.app.listen(this.port, () => {
             console.log(`Server is running on http://localhost:${ this.port }`);
         });
