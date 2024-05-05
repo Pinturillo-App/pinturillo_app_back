@@ -52,7 +52,7 @@ export class WordService {
         const responseCategoryByIdWord = await this.wordCategoryRepository.findCategoryByIdWord(id);
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
-        if(responseCategoryByIdWord.length > 0) throw new Error(WORD_ALREADY_USED_IN_CATEGORY);
+        if (responseCategoryByIdWord.length > 0) throw new Error(WORD_ALREADY_USED_IN_CATEGORY);
 
         this.wordRepository.deleteWord(id);
     }
