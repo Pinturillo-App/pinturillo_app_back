@@ -9,15 +9,15 @@ export class SocketController {
         this.socketService = new SocketService();
     }
 
-    joinRoom(idRoom: number, userName: string, ws: WebSocket) {
+    public joinRoom = (idRoom: number, userName: string, ws: WebSocket) => {
         this.socketService.joinRoom(idRoom, userName, ws);
     }
 
-    leaveRoom(idRoom: number, ws: WebSocket) {
+    public leaveRoom = (idRoom: number, ws: WebSocket) => {
         this.socketService.leaveRoom(idRoom, ws);
     }
 
-    sendMessageToRoom(idRoom: number, message: string, ws: WebSocket) {
+    public sendMessageToRoom = (idRoom: number, message: string, ws: WebSocket) => {
         this.socketService.sendMessageToRoom(idRoom, message, ws);
     }
 }

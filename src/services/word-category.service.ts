@@ -18,11 +18,11 @@ export class WordCategoryService {
         this.categoryRepository = new CategoryRepository();
     }
 
-    async getAllWordCategories(): Promise<WordCategory[]> {
+    public getAllWordCategories = async (): Promise<WordCategory[]> => {
         return await this.wordCategoryRepository.getAllWordCategories();
     }
 
-    async findWordCategoryById(id: number): Promise<WordCategory | undefined> {
+    public findWordCategoryById = async (id: number): Promise<WordCategory | undefined> => {
         const responseById = await this.wordCategoryRepository.findWordCategoryById(id);
 
         if (!responseById) throw new Error(WORD_CATEGORY_NOT_FOUND);
@@ -30,7 +30,7 @@ export class WordCategoryService {
         return responseById;
     }
 
-    async saveWordCategory(wordCategory: CreateWordCategoryDto): Promise<WordCategory> {
+    public saveWordCategory = async (wordCategory: CreateWordCategoryDto): Promise<WordCategory> => {
         const responseByIdWord = await this.wordRepository.findWordById(wordCategory.idWord);
         const responseByIdCategory = await this.categoryRepository.findCategoryById(wordCategory.idCategory);
         const data = createWordCategorySchema.validate(wordCategory);
@@ -42,7 +42,7 @@ export class WordCategoryService {
         return await this.wordCategoryRepository.saveWordCategory(wordCategory);
     }
 
-    async updateWordCategory(wordCategory: UpdateWordCategoryDto): Promise<WordCategory> {
+    public updateWordCategory = async (wordCategory: UpdateWordCategoryDto): Promise<WordCategory> => {
         const responseById = await this.wordCategoryRepository.findWordCategoryById(wordCategory.id);
         const responseByIdWord = await this.wordRepository.findWordById(wordCategory.idWord);
         const responseByIdCategory = await this.categoryRepository.findCategoryById(wordCategory.idCategory);
@@ -56,7 +56,7 @@ export class WordCategoryService {
         return await this.wordCategoryRepository.updateWordCategory(wordCategory);
     }
 
-    async deleteWordCategory(id: number): Promise<void> {
+    public deleteWordCategory = async (id: number): Promise<void> => {
         const responseById = await this.wordCategoryRepository.findWordCategoryById(id);
 
         if (!responseById) throw new Error(WORD_CATEGORY_NOT_FOUND);
