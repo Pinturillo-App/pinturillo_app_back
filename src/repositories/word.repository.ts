@@ -3,26 +3,26 @@ import { CreateWordDto, UpdateWordDto } from '../dto/word';
 import { Word } from '../entities';
 
 
-export class WordRepository{
+export class WordRepository {
     private repository = AppDataSource.getRepository(Word);
 
-    getAllWords = async () => {
+    public getAllWords = async () => {
         return this.repository.find();
     }
 
-    findWordById = async (id: number) => {
+    public findWordById = async (id: number) => {
         return this.repository.findOneBy({ id });
     }      
 
-    findWordByText = async (text: string) => {
+    public findWordByText = async (text: string) => {
         return this.repository.findOneBy({ text });
     }
 
-    saveWord = async (word: CreateWordDto) => {
+    public saveWord = async (word: CreateWordDto) => {
         return this.repository.save(word);
     }
 
-    updateWord = async (word: UpdateWordDto) => {
+    public updateWord = async (word: UpdateWordDto) => {
         const { id, ...updateData } = word;
 
         await this.repository.update({ id }, updateData);
@@ -30,7 +30,7 @@ export class WordRepository{
         return this.findWordById(id);
     }
 
-    deleteWord = async (id: number) => {
+    public deleteWord = async (id: number) => {
         return this.repository.delete(id);
     }
 }
