@@ -7,7 +7,14 @@ const options = {
             title: 'PinturilloApp API with swagger',
             version: '1.0.0',
             description:
-                'This is the API for PinturilloApp, a real-time drawing and guessing application. The API provides endpoints for handling categories, rooms, words, and word categories. Each of these resources has endpoints for getting, creating, updating, and deleting. - Categories: Categories are groupings of words that are used to organize the game. For example, you might have a Animals category that contains words like dog, cat, elephant, etc. - Rooms: Rooms are where players gather to play. Each room can have a limited number of players and a list of words or categories to use in that game. - Words: Words are the items that players will try to draw and guess. Each word belongs to one or more categories. - Word Categories: Word categories are groupings of words that are used to organize the game. For example, you might have a Animals category that contains words like dog, cat, elephant, etc. Please consult the individual endpoints for more details on how to interact with each resource.',
+                'This is the API for PinturilloApp, a real-time drawing and guessing application. The API provides endpoints for handling categories, rooms, words, and word categories.'
+                .concat('Each of these resources has endpoints for getting, creating, updating, and deleting. \n', 
+                        '- Categories: Categories are groupings of words that are used to organize the game. For example, you might have a Animals category that contains words like dog, cat, elephant, etc. \n',
+                        '- Rooms: Rooms are where players gather to play. Each room can have a limited number of players and a list of words or categories to use in that game. \n',
+                        '- Words: Words are the items that players will try to draw and guess. Each word belongs to one or more categories. \n',
+                        '- Word Categories: Word categories are groupings of words that are used to organize the game. For example, you might have a Animals category that contains words like dog, cat, elephant, etc. \n\n',
+                        'Please consult the individual endpoints for more details on how to interact with each resource.'
+                ),
             termsOfService: 'http://swagger.io/terms/',
             license: {
                 name: 'MIT',
@@ -793,8 +800,11 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:3000/api',
+                url: 'http://localhost:3000/api'
             },
+            {
+                url: 'ws://localhost:3000/api'
+            }
         ],
     },
     apis: ['./src/controllers/*.ts'],
