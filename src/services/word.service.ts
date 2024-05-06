@@ -11,15 +11,15 @@ export class WordService {
     private wordCategoryRepository: WordCategoryRepository;
     
     constructor() {
-        this.wordRepository         = new WordRepository();
+        this.wordRepository = new WordRepository();
         this.wordCategoryRepository = new WordCategoryRepository();
     }
 
-    async getAllWords(): Promise<Word[]> {
+    public getAllWords = async (): Promise<Word[]> => {
         return await this.wordRepository.getAllWords();
     }
 
-    async findWordById(id: number): Promise<Word | undefined> {
+    public findWordById = async (id: number): Promise<Word | undefined> => {
         const responseById = await this.wordRepository.findWordById(id);
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
@@ -27,7 +27,7 @@ export class WordService {
         return responseById;
     }
 
-    async saveWord(word: CreateWordDto): Promise<Word> {
+    public saveWord = async (word: CreateWordDto): Promise<Word> => {
         const responseByName = await this.wordRepository.findWordByText(word.text);
         const data = createWordSchema.validate(word);
 
@@ -37,7 +37,7 @@ export class WordService {
         return await this.wordRepository.saveWord(word);
     }
 
-    async updateWord(word: UpdateWordDto): Promise<Word> {
+    public updateWord = async (word: UpdateWordDto): Promise<Word> => {
         const responseById = await this.wordRepository.findWordById(word.id);
         const data = updateWordSchema.validate(word);
 
@@ -47,12 +47,12 @@ export class WordService {
         return await this.wordRepository.updateWord(word);
     }
 
-    async deleteWord(id: number): Promise<void> {
+    public deleteWord = async (id: number): Promise<void> => {
         const responseById = await this.wordRepository.findWordById(id);
         const responseCategoryByIdWord = await this.wordCategoryRepository.findCategoryByIdWord(id);
 
         if (!responseById) throw new Error(WORD_NOT_FOUND);
-        if(responseCategoryByIdWord.length > 0) throw new Error(WORD_ALREADY_USED_IN_CATEGORY);
+        if (responseCategoryByIdWord.length > 0) throw new Error(WORD_ALREADY_USED_IN_CATEGORY);
 
         this.wordRepository.deleteWord(id);
     }

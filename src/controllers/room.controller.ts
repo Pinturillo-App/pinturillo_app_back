@@ -32,6 +32,18 @@ export class RoomController {
         }
     }
 
+    public getWordsByRoom = async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        try {
+            const words = await this.roomService.getWordsByRoom(+id);
+
+            return res.status(OK_STATUS).json(words);
+        } catch (error) {
+            return res.status(NOT_FOUND_STATUS).json({ error: error.message });
+        }
+    }
+
     public saveRoom = async (req: Request, res: Response) => {
         const room = req.body;
 

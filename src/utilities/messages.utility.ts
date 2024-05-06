@@ -13,3 +13,8 @@ export const WORD_ALREADY_EXISTS: string = 'Word already exists.';
 
 export const WORD_CATEGORY_NOT_FOUND: string = 'Word category not found.';
 export const WORD_ALREADY_USED_IN_CATEGORY: string = 'Word is being used in a category.';
+
+export const USERNAME_AVATAR_NOT_PROVIDED: string = 'Username and avatar must be provided.';
+export const UNKNOWN_MESSAGE_TYPE: string = 'Message type is unknown.';
+export const DATA_IS_EMPTY: string = 'Message data is empty.';
+export const MESSAGE_NOT_VALID: string = 'Message format is not valid.';
