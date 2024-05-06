@@ -1,6 +1,6 @@
 import { WebSocket } from 'ws';
 import { RoomRepository } from '../repositories/room.repository';
-import { USER_NOT_PROVIDED } from '../utilities/messages.utility';
+import { USERNAME_AVATAR_NOT_PROVIDED } from '../utilities/messages.utility';
 
 
 export class SocketService {
@@ -13,17 +13,14 @@ export class SocketService {
     }
 
     public joinRoom = (idRoom: number, userName: string, userAvatar: string, ws: WebSocket): void => {
-        if(!userName || !userAvatar ) {
-            ws.send(JSON.stringify({ error: USER_NOT_PROVIDED }));
+        if (!userName || !userAvatar) {
+            ws.send(JSON.stringify({ error: USERNAME_AVATAR_NOT_PROVIDED }));
             ws.close();
             return;
-        }
-        
-        if (!this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
+        } if (!this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
             this.rooms[idRoom] = new Set();
+            this.rooms[idRoom].add({ ws, userName, userAvatar});
         }
-
-        this.rooms[idRoom].add({ ws, userName,  userAvatar});
     }
 
     public leaveRoom = (idRoom: number, ws: WebSocket): void => {
@@ -44,15 +41,14 @@ export class SocketService {
             const randomIndex = Math.floor(Math.random() * words.length);
             const selectedWord = words[randomIndex].text;
 
-            // ws.send(JSON.stringify({ type: 'WORD_TO_DRAW', data: selectedWord }));
-            this.sendMessageToUser(idRoom, `You must draw: ${selectedWord}`, ws);
+            this.sendMessageToUser(idRoom, `You must draw: ${ selectedWord }`, ws);
         }
     }
 
     public sendMessageToUser = (idRoom: number, message: string, ws: WebSocket): void => {
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
             this.rooms[idRoom].forEach(client => {
-                if (client.ws == ws) {
+                if (client.ws === ws) {
                     client.ws.send(message);
                 }
             });
@@ -62,7 +58,7 @@ export class SocketService {
     public sendMessageToRoom = (idRoom: number, message: string, ws: WebSocket): void => {
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
             this.rooms[idRoom].forEach(client => {
-                if (client.ws.readyState === ws.OPEN) {
+                if (client.ws !== ws && client.ws.readyState === ws.OPEN) {
                     client.ws.send(message);
                 }
             });
