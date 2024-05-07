@@ -3,26 +3,50 @@ import { RoomRepository } from '../repositories/room.repository';
 import { USERNAME_AVATAR_NOT_PROVIDED, USER_ALREADY_EXIST_IN_ROOM } from '../utilities/messages.utility';
 import e from 'express';
 
+// const settings = {
+//   idRoom: {
+//     totalTurns : numeroDeUsuarios * 2,
+//     turnsPlayed: contadorDeNumeroDeTurnos,
+//     playersCount: {
+//         nombreUsuario: NumeroJugadas
+//         nombreUsuario: NumeroJugadas
+//         nombreUsuario: NumeroJugadas
+//         nombreUsuario: NumeroJugadas
+//         ...
+//     }
+//      playedWords: [ palabra1, palabra2 ... ],
+//     usersWinners : [ nombreUsuario, nombreUsuario, nombreUsuario ... ]
+// }
+
 
 export class SocketService {
     private rooms: object;
     private wordInRoom: object;
+    private settings: object;
     private roomRepository: RoomRepository;
+    private roundNumber : number = 2;
 
     constructor() {
         this.rooms = {};
         this.wordInRoom = {};
+        this.settings = {};
         this.roomRepository = new RoomRepository();
     }
 
     public joinRoom = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket): void => {
+
         let existUser = false;
         if (!userName || !userAvatar) {
             ws.send(JSON.stringify({ error: USERNAME_AVATAR_NOT_PROVIDED }));
             ws.close();
             return;
         } if (this.roomRepository.findRoomById(idRoom)) {
-            if(!this.rooms[idRoom]) this.rooms[idRoom] = new Set();
+
+            if(!this.rooms[idRoom]) {
+                this.rooms[idRoom] = new Set();
+            }
+
+            //Validar nombre de usuario no repetido
             this.rooms[idRoom].forEach(client => {
                 if(client.userName === userName) {
                     ws.send(JSON.stringify({ error: USER_ALREADY_EXIST_IN_ROOM }));
@@ -31,10 +55,32 @@ export class SocketService {
                 }
             })
 
-            if(!existUser){
+            //Añadir usuario a sala
+            if(!existUser && this.rooms[idRoom].size <= 10 ){
                 this.rooms[idRoom].add({ ws, userName, userAvatar, userPoints});
-                console.log(this.rooms)
+                
+                
+
                 this.sendMessageToRoom(idRoom, `${ userName } has joined the room`, ws);
+                //Crear configuraciones de sala
+                if(this.rooms[idRoom].size === 2){
+                    this.settings[idRoom] = {   totalTurns: 4, 
+                                                turnsPlayed: 0,  
+                                                playedWords: [],
+                                                playersTurnsCount: {},
+                                                usersWinnersPerTurn: []
+                                            }
+                    
+                    this.rooms[idRoom].forEach(client => {
+                        this.settings[idRoom].playersTurnsCount[client.userName] = 0;
+                    });
+
+                    this.startTurnInRoom(idRoom, this.rooms[idRoom].values().next().value.ws);
+                }
+                if( this.rooms[idRoom].size > 2 ){
+                    this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns + this.roundNumber;
+                    this.settings[idRoom].playersTurnsCount[userName] = 0;
+                }
             }
         }
     }
@@ -46,7 +92,12 @@ export class SocketService {
                     client.ws.close();
                     this.rooms[idRoom].delete(client);
                 }
+
+                delete this.settings[idRoom].playersTurnsCount[userName];
+                this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
             });
+
+
 
             if (this.rooms[idRoom].size === 0){
                 this.deleteRoomInfo(idRoom)
@@ -63,14 +114,73 @@ export class SocketService {
 
     public startTurnInRoom = async (idRoom: number, ws: WebSocket): Promise<void> => {
         const room = await this.roomRepository.findRoomById(idRoom);
-        if (this.rooms[idRoom] && room) {
+        if (this.rooms[idRoom] && room && this.settings[idRoom].turnsPlayed < this.settings[idRoom].totalTurns) {
+            
             const words = room.categories['words'];
-            const randomIndex = Math.floor(Math.random() * words.length);
-            const selectedWord = words[randomIndex].text;
 
-            this.changeWordInGame(idRoom, selectedWord);
-            this.sendMessageToUser(idRoom, `You must draw: ${ selectedWord }`, ws);
+            let wordUsed = true;
+
+            while( wordUsed && this.settings[idRoom].playedWords.length <= words.length){
+                const randomIndex = Math.floor(Math.random() * words.length);
+                const selectedWord = words[randomIndex].text;
+                console.log("Entro 1 vez")
+                if( !this.settings[idRoom].playedWords.includes(selectedWord) ){
+                    console.log("Entro 2 vez")
+                    wordUsed = false;
+                    this.settings[idRoom].playedWords.push(selectedWord);
+                    this.settings[idRoom].turnsPlayed++;
+
+                    this.settings[idRoom].usersWinnersPerTurn = [];
+
+                    this.rooms[idRoom].forEach(client => {
+                        if(client.ws === ws){
+                            this.settings[idRoom].playersTurnsCount[client.userName]++;
+                            this.sendMessageToRoom(idRoom, `${ client.userName } has started their turn`, ws);
+                        }
+                    })
+
+                    this.changeWordInGame(idRoom, selectedWord);
+                    this.sendMessageToUser(idRoom, `You must draw: ${ selectedWord }`, ws);
+                }
+            }
         }
+        else if( this.settings[idRoom].turnsPlayed >= this.settings[idRoom].totalTurns){
+            this.sendMessageToRoom(idRoom, `The game has been finished.`, ws);
+            this.closeRoom(idRoom);
+        }
+    }
+
+    public finishTurn = (idRoom: number, ws: WebSocket, userName: string) => {
+
+        if( this.settings[idRoom].usersWinnersPerTurn.length == this.rooms[idRoom].size - 1 ){
+            this.rooms[idRoom].forEach(client => {
+                if(client.ws === ws) {
+                    client.userPoints += 10;
+                }
+            });
+          
+            this.startTurnInRoom(idRoom, this.asignTurn(idRoom, ws));
+        }
+    }
+
+    public asignTurn = (idRoom: number, ws: WebSocket ) => {
+        
+        let playersTurns = Object.keys(this.settings[idRoom].playersTurnsCount);
+        let playerTurnAssigned;
+        let wsSelected;
+
+        playersTurns.sort((a,b) => this.settings[idRoom].playersTurnsCount[a] - this.settings[idRoom].playersTurnsCount[b] );
+        playerTurnAssigned = playersTurns[0];
+        
+        this.rooms[idRoom].forEach(client => {
+            if( client.userName === playerTurnAssigned ){
+                wsSelected = client.ws;
+            }
+        })
+        console.log(this.rooms)
+        console.log(this.settings )
+        console.log("-------------------")
+        return wsSelected;
     }
 
     public tryToGuessWord = async (idRoom: number, word: string, ws: WebSocket,  userName: string, userAvatar: string, userPoints: number, pointsToSum: number ): Promise<void> => {
@@ -78,8 +188,11 @@ export class SocketService {
             if (this.wordInRoom[idRoom].has(word)) {
                 this.rooms[idRoom].forEach(client => {
                     if (client.userName === userName) {
+
                         client.userPoints += pointsToSum;
                         this.sendMessageToRoom(idRoom, `${ userName } has guessed the word`, ws);
+                        this.settings[idRoom].usersWinnersPerTurn.push(userName);
+                        this.finishTurn(idRoom, ws, userName);
                     }
                 });
             }
@@ -97,7 +210,7 @@ export class SocketService {
                 }
             });
         }
-    }
+    } 
 
     public sendMessageToRoom = (idRoom: number, message: string, ws: WebSocket): void => {
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
@@ -122,5 +235,6 @@ export class SocketService {
     private deleteRoomInfo = (idRoom: number): void => {
         delete this.wordInRoom[idRoom];
         delete this.rooms[idRoom];
+        delete this.settings[idRoom];
     }
 }

@@ -33,6 +33,10 @@ export class SocketController {
         this.socketService.tryToGuessWord(idRoom, word, ws, userName, userAvatar, userPoints, pointsToSum );
     }
 
+    public finishTurn = (idRoom: number, ws: WebSocket, userName: string) => {
+        this.socketService.finishTurn(idRoom, ws, userName);
+    }
+
     public closeRoom = (idRoom: number) => {
         this.socketService.closeRoom(idRoom);
     }

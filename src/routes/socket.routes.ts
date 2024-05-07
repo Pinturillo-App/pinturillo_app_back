@@ -58,11 +58,11 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
         //Pero se pueden manejar desde el front
         case 'START_TURN':
             socketController.startTurnInRoom(idRoom, ws);
-            socketController.sendMessageToRoom(idRoom, `${ userName } has started their turn`, ws);
             break;
-        case 'FINISH_TURN':
-            socketController.sendMessageToRoom(idRoom, `${ userName } has finished their turn`, ws);
-            break;
+        // case 'FINISH_TURN':
+        //     socketController.sendMessageToRoom(idRoom, `${ userName } has finished their turn`, ws);
+        //     socketController.finishTurn(idRoom, ws, userName);
+        //     break;
         case 'CLOSE_ROOM':
                 socketController.sendMessageToRoom(idRoom, `The game has been finished.`, ws);
                 socketController.closeRoom(idRoom);
