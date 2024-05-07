@@ -1,30 +1,17 @@
 import { WebSocket } from 'ws';
 import { RoomRepository } from '../repositories/room.repository';
 import { USERNAME_AVATAR_NOT_PROVIDED, USER_ALREADY_EXIST_IN_ROOM } from '../utilities/messages.utility';
-import e from 'express';
-
-// const settings = {
-//   idRoom: {
-//     totalTurns : numeroDeUsuarios * 2,
-//     turnsPlayed: contadorDeNumeroDeTurnos,
-//     playersCount: {
-//         nombreUsuario: NumeroJugadas
-//         nombreUsuario: NumeroJugadas
-//         nombreUsuario: NumeroJugadas
-//         nombreUsuario: NumeroJugadas
-//         ...
-//     }
-//      playedWords: [ palabra1, palabra2 ... ],
-//     usersWinners : [ nombreUsuario, nombreUsuario, nombreUsuario ... ]
-// }
+import { compareClientData, compareClientName, validateRoomExistAndById, validateRoomExistById, validateUserNameAndAvatar } from '../utilities/sockets.utility';
 
 
 export class SocketService {
+
     private rooms: object;
     private wordInRoom: object;
     private settings: object;
-    private roomRepository: RoomRepository;
     private roundNumber : number = 2;
+    private numUsers: number = 10;
+    private roomRepository: RoomRepository;
 
     constructor() {
         this.rooms = {};
@@ -33,73 +20,37 @@ export class SocketService {
         this.roomRepository = new RoomRepository();
     }
 
-    public joinRoom = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket): void => {
+    public joinRoom = async (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket): Promise<void> => {
 
         let existUser = false;
-        if (!userName || !userAvatar) {
-            ws.send(JSON.stringify({ error: USERNAME_AVATAR_NOT_PROVIDED }));
-            ws.close();
-            return;
-        } if (this.roomRepository.findRoomById(idRoom)) {
+
+        if (validateUserNameAndAvatar(userName, userAvatar, ws)) return;
+
+        if ( await validateRoomExistById( idRoom, this.roomRepository, ws )) {
 
             if(!this.rooms[idRoom]) {
                 this.rooms[idRoom] = new Set();
             }
 
-            //Validar nombre de usuario no repetido
             this.rooms[idRoom].forEach(client => {
-                if(client.userName === userName) {
+
+                if( compareClientName(userName, client.userName)) {
                     ws.send(JSON.stringify({ error: USER_ALREADY_EXIST_IN_ROOM }));
                     ws.close();
                     existUser = true;
                 }
             })
 
-            //Añadir usuario a sala
-            if(!existUser && this.rooms[idRoom].size <= 10 ){
-                this.rooms[idRoom].add({ ws, userName, userAvatar, userPoints});
-                
-                
-
-                this.sendMessageToRoom(idRoom, `${ userName } has joined the room`, ws);
-                //Crear configuraciones de sala
-                if(this.rooms[idRoom].size === 2){
-                    this.settings[idRoom] = {   totalTurns: 4, 
-                                                turnsPlayed: 0,  
-                                                playedWords: [],
-                                                playersTurnsCount: {},
-                                                usersWinnersPerTurn: []
-                                            }
-                    
-                    this.rooms[idRoom].forEach(client => {
-                        this.settings[idRoom].playersTurnsCount[client.userName] = 0;
-                    });
-
-                    this.startTurnInRoom(idRoom, this.rooms[idRoom].values().next().value.ws);
-                }
-                if( this.rooms[idRoom].size > 2 ){
-                    this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns + this.roundNumber;
-                    this.settings[idRoom].playersTurnsCount[userName] = 0;
-                }
-            }
+            this.addUsersToRoom( existUser, userName, userAvatar, userPoints, idRoom, ws );
         }
     }
 
     public leaveRoom = (idRoom: number, ws: WebSocket, userName: string, userAvatar: string, userPoints: number ): void => {
-        if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
-            this.rooms[idRoom].forEach(client => { 
-                if( client.userName === userName && client.userAvatar === userAvatar && client.userPoints === userPoints) {
-                    client.ws.close();
-                    this.rooms[idRoom].delete(client);
-                }
+        if ( validateRoomExistAndById( this.rooms, idRoom, this.roomRepository ) ) {            
+            
+            this.pushOutUser(userName, userAvatar, userPoints, idRoom);
 
-                delete this.settings[idRoom].playersTurnsCount[userName];
-                this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
-            });
-
-
-
-            if (this.rooms[idRoom].size === 0){
+            if ( this.rooms[idRoom] && this.rooms[idRoom].size === 0){
                 this.deleteRoomInfo(idRoom)
             }
         }
@@ -123,9 +74,8 @@ export class SocketService {
             while( wordUsed && this.settings[idRoom].playedWords.length <= words.length){
                 const randomIndex = Math.floor(Math.random() * words.length);
                 const selectedWord = words[randomIndex].text;
-                console.log("Entro 1 vez")
                 if( !this.settings[idRoom].playedWords.includes(selectedWord) ){
-                    console.log("Entro 2 vez")
+
                     wordUsed = false;
                     this.settings[idRoom].playedWords.push(selectedWord);
                     this.settings[idRoom].turnsPlayed++;
@@ -153,12 +103,6 @@ export class SocketService {
     public finishTurn = (idRoom: number, ws: WebSocket, userName: string) => {
 
         if( this.settings[idRoom].usersWinnersPerTurn.length == this.rooms[idRoom].size - 1 ){
-            this.rooms[idRoom].forEach(client => {
-                if(client.ws === ws) {
-                    client.userPoints += 10;
-                }
-            });
-          
             this.startTurnInRoom(idRoom, this.asignTurn(idRoom, ws));
         }
     }
@@ -177,9 +121,11 @@ export class SocketService {
                 wsSelected = client.ws;
             }
         })
+
+        // impresiones en consola para conocer el estado del juego
         console.log(this.rooms)
         console.log(this.settings )
-        console.log("-------------------")
+        console.log("-------------------") 
         return wsSelected;
     }
 
@@ -237,4 +183,56 @@ export class SocketService {
         delete this.rooms[idRoom];
         delete this.settings[idRoom];
     }
+
+
+
+    private addUsersToRoom = ( existUser: boolean, userName: string, userAvatar: string, userPoints: number, idRoom: number, ws: WebSocket ) =>{
+        if(!existUser && this.rooms[idRoom].size <= this.numUsers ){
+    
+            this.rooms[idRoom].add({ ws, userName, userAvatar, userPoints});
+            this.sendMessageToRoom(idRoom, `${ userName } has joined the room`, ws);
+            this.settingsTurnsConfiguration( idRoom, userName)
+        }
+    }
+    
+    private settingsTurnsConfiguration = ( idRoom: number, userName: string ) => {
+        if(this.rooms[idRoom].size === 2){
+            this.settings[idRoom] = {   totalTurns: 4, 
+                                        turnsPlayed: 0,  
+                                        playedWords: [],
+                                        playersTurnsCount: {},
+                                        usersWinnersPerTurn: []
+                                    }
+            
+            this.rooms[idRoom].forEach(client => {
+                this.settings[idRoom].playersTurnsCount[client.userName] = 0;
+            });
+    
+            this.startTurnInRoom(idRoom, this.rooms[idRoom].values().next().value.ws);
+        }
+        if( this.rooms[idRoom].size > 2 ){
+    
+            this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns + this.roundNumber;
+            this.settings[idRoom].playersTurnsCount[userName] = 0;
+        }
+    }
+    
+
+    private pushOutUser = ( userName: string, userAvatar: string, userPoints: number, idRoom: number)=>{
+
+        if( !this.rooms || !this.rooms[idRoom]) return;
+        this.rooms[idRoom].forEach(client => { 
+
+            if( compareClientData(client, userName, userAvatar, userPoints ) ){
+                client.ws.close();
+                this.rooms[idRoom].delete(client);
+
+                delete this.settings[idRoom].playersTurnsCount[userName];
+                this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
+                
+                this.finishTurn(idRoom, client.ws, userName);
+            }
+        });
+    }
 }
+
