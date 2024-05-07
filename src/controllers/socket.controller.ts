@@ -29,8 +29,8 @@ export class SocketController {
         this.socketService.sendMessageToRoom(idRoom, message, ws);
     }
 
-    public tryToGuessWord = (idRoom: number, word: string, ws: WebSocket, userName: string, userAvatar: string, userPoints: number, pointsToSum: number ) => {
-        this.socketService.tryToGuessWord(idRoom, word, ws, userName, userAvatar, userPoints, pointsToSum );
+    public tryToGuessWord = (idRoom: number, word: string, ws: WebSocket, userName: string, userAvatar: string, userPoints: number, pointsToSum: number) => {
+        this.socketService.tryToGuessWord(idRoom, word, ws, userName, userAvatar, userPoints, pointsToSum);
     }
 
     public finishTurn = (idRoom: number, ws: WebSocket, userName: string) => {
