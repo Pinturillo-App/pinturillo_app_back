@@ -18,3 +18,5 @@ export const USERNAME_AVATAR_NOT_PROVIDED: string = 'Username and avatar must be
 export const UNKNOWN_MESSAGE_TYPE: string = 'Message type is unknown.';
 export const DATA_IS_EMPTY: string = 'Message data is empty.';
 export const MESSAGE_NOT_VALID: string = 'Message format is not valid.';
+
+export const USER_ALREADY_EXIST_IN_ROOM: string = "Username is already used in this room.";
