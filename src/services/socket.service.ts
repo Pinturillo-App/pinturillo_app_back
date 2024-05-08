@@ -184,8 +184,6 @@ export class SocketService {
         delete this.settings[idRoom];
     }
 
-
-
     private addUsersToRoom = ( existUser: boolean, userName: string, userAvatar: string, userPoints: number, idRoom: number, ws: WebSocket ) =>{
         if(!existUser && this.rooms[idRoom].size <= this.numUsers ){
     
@@ -216,7 +214,6 @@ export class SocketService {
             this.settings[idRoom].playersTurnsCount[userName] = 0;
         }
     }
-    
 
     private pushOutUser = ( userName: string, userAvatar: string, userPoints: number, idRoom: number)=>{
 
