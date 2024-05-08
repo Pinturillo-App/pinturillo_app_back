@@ -219,8 +219,10 @@ export class SocketService {
                 delete this.settings[idRoom].playersTurnsCount[userName];
                 this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
                 
+                console.log("Usuario dibujando: " + this.userDrawing);
+
                 if( compareClientName(userName, this.userDrawing ) ){
-                    this.startTurnInRoom(idRoom, this.asignTurn(idRoom, client.ws));
+                    this.startTurnInRoom(idRoom, this.assignTurn(idRoom, client.ws));
                 }
 
                 this.finishTurn(idRoom, client.ws, userName);
