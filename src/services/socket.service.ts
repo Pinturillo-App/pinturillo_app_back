@@ -11,8 +11,7 @@ export class SocketService {
     private roundNumber : number = 2;
     private numUsers: number = 5;
     private roomRepository: RoomRepository;
-    private userDrawing: string = "";
-
+    
     constructor() {
         this.rooms = {};
         this.wordInRoom = {};
@@ -114,7 +113,6 @@ export class SocketService {
         this.rooms[idRoom].forEach(client => {
             if( client.userName === playerTurnAssigned ){
                 wsSelected = client.ws;
-                this.userDrawing = client.userName;
             }
         })
 
@@ -207,23 +205,16 @@ export class SocketService {
         }
     }
 
-    private pushOutUser = ( userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
+    private pushOutUser = (userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
         if (!this.rooms || !this.rooms[idRoom]) return;
         
-        this.rooms[idRoom].forEach(client => { 
-
-            if( compareClientData(client, userName, userAvatar, userPoints ) ){
+        this.rooms[idRoom].forEach(client => {
+            if (compareClientData(client, userName, userAvatar, userPoints)) {
                 client.ws.close();
                 this.rooms[idRoom].delete(client);
                 
                 delete this.settings[idRoom].playersTurnsCount[userName];
                 this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
-
-                console.log("Usuario dibujando: " + this.userDrawing);
-
-                if( compareClientName(userName, this.userDrawing ) ){
-                    this.startTurnInRoom(idRoom, this.assignTurn(idRoom, client.ws));
-                }
 
                 this.finishTurn(idRoom, client.ws, userName);
             }
