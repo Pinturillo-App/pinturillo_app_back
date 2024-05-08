@@ -210,7 +210,7 @@ export class SocketService {
         if (!this.rooms || !this.rooms[idRoom]) return;
             this.rooms[idRoom].forEach(client => { 
 
-            if( compareClientData(client, userName, userAvatar, userPoints ) ){
+            if (compareClientData(client, userName, userAvatar, userPoints)) {
                 client.ws.close();
                 this.rooms[idRoom].delete(client);
                 
