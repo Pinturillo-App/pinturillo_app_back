@@ -20,7 +20,7 @@ export const setupSocketRoutes = (path: string, app: express.Application, expres
     });
 
     return app;
-};
+}
 
 const handleSocketConnection = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket) => {
     socketController.joinRoom(idRoom, userName, userAvatar, userPoints, ws);
