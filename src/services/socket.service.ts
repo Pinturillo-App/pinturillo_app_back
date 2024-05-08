@@ -58,7 +58,7 @@ export class SocketService {
     public sendMessageToRoom = (idRoom: number, message: string, ws: WebSocket): void => {
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
             this.rooms[idRoom].forEach(client => {
-                if (client.ws !== ws && client.ws.readyState === ws.OPEN) {
+                if (client.ws.readyState === ws.OPEN) {
                     client.ws.send(message);
                 }
             });
