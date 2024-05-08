@@ -15,8 +15,8 @@ export class RoomService {
         this.categoryRepository = new CategoryRepository();
     }
 
-    public getAllRooms = async (state?: string): Promise<Room[]> => {
-        return await this.roomRepository.getAllRooms(state);
+    public getAllRooms = async (state?: string, idCategory?: number): Promise<Room[]> => {
+        return await this.roomRepository.getAllRooms(state, idCategory);
     }
 
     public getWordsByRoom = async (id: number): Promise<Word[]> => {
