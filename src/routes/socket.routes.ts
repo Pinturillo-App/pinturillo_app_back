@@ -50,11 +50,8 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
                 socketController.sendMessageToUser(idRoom, DATA_IS_EMPTY, ws);
                 return;
             }
-            socketController.tryToGuessWord(idRoom, jsonMessage.data, ws, userName, userAvatar, userPoints, jsonMessage.pointsToSum || 0 );
+            socketController.tryToGuessWord(idRoom, jsonMessage.data, ws, userName, userAvatar, userPoints, jsonMessage.pointsToSum || 0);
             break;
-
-        //TODO: Estos 3 metodos van de la mano segun el caso de uso
-        //Pero se pueden manejar desde el front
         case 'START_TURN':
             socketController.startTurnInRoom(idRoom, ws);
             break;
@@ -63,12 +60,11 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
             socketController.finishTurn(idRoom, ws, userName);
             break;
         case 'CLOSE_ROOM':
-                socketController.sendMessageToRoom(idRoom, `The game has been finished.`, ws);
-                socketController.closeRoom(idRoom);
-                break;
-        //------
+            socketController.sendMessageToRoom(idRoom, `The game has been finished.`, ws);
+            socketController.closeRoom(idRoom);
+            break;
         case 'LEAVE_ROOM':
-            socketController.sendMessageToRoom(idRoom, `${ userName } has left`, ws);
+            socketController.sendMessageToRoom(idRoom, `${ userName } has left.`, ws);
             socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
             break;
         default:
