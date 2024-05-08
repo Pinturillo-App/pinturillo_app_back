@@ -206,10 +206,10 @@ export class SocketService {
     }
     
 
-    private pushOutUser = ( userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
+    private pushOutUser = (userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
         if (!this.rooms || !this.rooms[idRoom]) return;
-            this.rooms[idRoom].forEach(client => { 
-
+        
+        this.rooms[idRoom].forEach(client => { 
             if (compareClientData(client, userName, userAvatar, userPoints)) {
                 client.ws.close();
                 this.rooms[idRoom].delete(client);
