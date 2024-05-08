@@ -23,8 +23,10 @@ export class RoomController {
     }
 
     public getAllRooms = async (req: Request, res: Response) => {
+        const state = <string> req.query.state;
+
         try {
-            const rooms = await this.roomService.getAllRooms();
+            const rooms = await this.roomService.getAllRooms(state);
 
             return res.status(OK_STATUS).json(rooms);
         } catch (error) {

@@ -204,13 +204,12 @@ export class SocketService {
             this.settings[idRoom].playersTurnsCount[userName] = 0;
         }
     }
-    
 
-    private pushOutUser = ( userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
+    private pushOutUser = (userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
         if (!this.rooms || !this.rooms[idRoom]) return;
-            this.rooms[idRoom].forEach(client => { 
-
-            if( compareClientData(client, userName, userAvatar, userPoints ) ){
+        
+        this.rooms[idRoom].forEach(client => {
+            if (compareClientData(client, userName, userAvatar, userPoints)) {
                 client.ws.close();
                 this.rooms[idRoom].delete(client);
                 
