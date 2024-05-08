@@ -34,8 +34,8 @@ export class CategoryService {
         const responseByName = await this.categoryRepository.findCategoryByName(category.name);
         const data = createCategorySchema.validate(category);
 
-        if (responseByName) throw new Error(CATEGORY_ALREADY_EXISTS);
         if (data.error) throw mapJoiErrors(data.error.details);
+        if (responseByName) throw new Error(CATEGORY_ALREADY_EXISTS);
 
         return await this.categoryRepository.saveCategory(category);
     }
@@ -44,8 +44,8 @@ export class CategoryService {
         const responseById = await this.categoryRepository.findCategoryById(category.id);
         const data = updateCategorySchema.validate(category);
 
-        if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
         if (data.error) throw mapJoiErrors(data.error.details);
+        if (!responseById) throw new Error(CATEGORY_NOT_FOUND);
 
         return await this.categoryRepository.updateCategory(category);
     }
