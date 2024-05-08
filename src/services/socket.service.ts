@@ -84,7 +84,6 @@ export class SocketService {
                             this.settings[idRoom].playersTurnsCount[client.userName]++;
 
                             this.sendMessageToRoom(idRoom, `${ client.userName } has started their turn`, ws);
-                            this.userDrawing = client.userName;
                         }
                     })
 
@@ -115,6 +114,7 @@ export class SocketService {
         this.rooms[idRoom].forEach(client => {
             if( client.userName === playerTurnAssigned ){
                 wsSelected = client.ws;
+                this.userDrawing = client.userName;
             }
         })
 
@@ -212,13 +212,14 @@ export class SocketService {
         if (!this.rooms || !this.rooms[idRoom]) return;
             this.rooms[idRoom].forEach(client => { 
 
-            if (compareClientData(client, userName, userAvatar, userPoints)) {
+            if( compareClientData(client, userName, userAvatar, userPoints ) ){
                 client.ws.close();
                 this.rooms[idRoom].delete(client);
                 
                 delete this.settings[idRoom].playersTurnsCount[userName];
                 this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
                 
+                console.log( this.userDrawing )
                 if( compareClientName(userName, this.userDrawing ) ){
                     this.startTurnInRoom(idRoom, this.asignTurn(idRoom, client.ws));
                 }
