@@ -9,8 +9,9 @@ export class SocketService {
     private wordInRoom: object;
     private settings: object;
     private roundNumber : number = 2;
-    private numUsers: number = 10;
+    private numUsers: number = 5;
     private roomRepository: RoomRepository;
+    private userDrawing: string = "";
 
     constructor() {
         this.rooms = {};
@@ -81,7 +82,9 @@ export class SocketService {
                     this.rooms[idRoom].forEach(client => {
                         if (client.ws === ws) {
                             this.settings[idRoom].playersTurnsCount[client.userName]++;
-                            this.sendMessageToRoom(idRoom, `${ client.userName } has started their turn.`, ws);
+
+                            this.sendMessageToRoom(idRoom, `${ client.userName } has started their turn`, ws);
+                            this.userDrawing = client.userName;
                         }
                     })
 
@@ -211,10 +214,14 @@ export class SocketService {
             if (compareClientData(client, userName, userAvatar, userPoints)) {
                 client.ws.close();
                 this.rooms[idRoom].delete(client);
-
+                
                 delete this.settings[idRoom].playersTurnsCount[userName];
                 this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
                 
+                if( compareClientName(userName, this.userDrawing ) ){
+                    this.startTurnInRoom(idRoom, this.asignTurn(idRoom, client.ws));
+                }
+
                 this.finishTurn(idRoom, client.ws, userName);
             }
         });
