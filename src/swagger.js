@@ -449,6 +449,42 @@ const options = {
                     },
                 },
             },
+            '/room/getWords/{categoryId}': {
+                get: {
+                    tags: ['room'],
+                    summary: 'Find words by category id',
+                    description: 'Endpoint to find a word by its category id.',
+                    parameters: [
+                        {
+                            name: 'categoryId',
+                            in: 'path',
+                            required: true,
+                            description: 'Id of the category to retrieve words.',
+                            schema: {
+                                type: 'integer',
+                            },
+                        },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'Successful operation.',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        $ref: '#/components/schemas/WordDTO',
+                                    },
+                                },
+                            },
+                        },
+                        404: {
+                            description: 'Category id not found.',
+                        },
+                        500: {
+                            description: 'Internal server error.',
+                        },
+                    },
+                },
+            },
             '/room/create': {
                 post: {
                     tags: ['room'],
