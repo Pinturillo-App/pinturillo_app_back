@@ -6,8 +6,8 @@ import { Room } from '../entities';
 export class RoomRepository {
     private repository = AppDataSource.getRepository(Room);
 
-    public getAllRooms = async (state?: string) => {
-        return this.repository.find({ where: state ? { state }: {} });
+    public getAllRooms = async (state?: string, idCategory?: number) => {
+        return this.repository.find({ where: { ...(state ? { state }: {}), ...(idCategory ? { idCategory }: {}) } });
     }
 
     public findRoomById = async (id: number) => {

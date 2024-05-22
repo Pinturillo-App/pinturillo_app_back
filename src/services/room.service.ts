@@ -15,8 +15,8 @@ export class RoomService {
         this.categoryRepository = new CategoryRepository();
     }
 
-    public getAllRooms = async (state?: string): Promise<Room[]> => {
-        return await this.roomRepository.getAllRooms(state);
+    public getAllRooms = async (state?: string, idCategory?: number): Promise<Room[]> => {
+        return await this.roomRepository.getAllRooms(state, idCategory);
     }
 
     public getWordsByRoom = async (id: number): Promise<Word[]> => {
@@ -39,18 +39,20 @@ export class RoomService {
         const responseByIdCategory = await this.categoryRepository.findCategoryById(room.idCategory);
         const data = createRoomSchema.validate(room);
 
-        if (!responseByIdCategory) throw new Error(ID_CATEGORY_NOT_FOUND);
         if (data.error) throw mapJoiErrors(data.error.details);
+        if (!responseByIdCategory) throw new Error(ID_CATEGORY_NOT_FOUND);
 
         return await this.roomRepository.createRoom(room);
     }
 
     public updateRoom = async (room: Room): Promise<Room> => {
         const responseById = await this.roomRepository.findRoomById(room.id);
+        const responseByIdCategory = await this.categoryRepository.findCategoryById(room.idCategory);
         const data = updateRoomSchema.validate(room);
 
-        if (!responseById) throw new Error(ROOM_NOT_FOUND);
         if (data.error) throw mapJoiErrors(data.error.details);
+        if (!responseById) throw new Error(ROOM_NOT_FOUND);
+        if (!responseByIdCategory) throw new Error(ID_CATEGORY_NOT_FOUND);
 
         return await this.roomRepository.updateRoom(room);
     }
