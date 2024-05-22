@@ -23,17 +23,18 @@ export class SocketService {
         let existUser = false;
 
         if (validateUserNameAndAvatar(userName, userAvatar, ws)) return;
-
+        
         if (await validateRoomExistById(idRoom, this.roomRepository, ws)) {
             if (!this.rooms[idRoom]) {
                 this.rooms[idRoom] = new Set();
             }
-
+            
             this.rooms[idRoom].forEach(client => {
 
                 if (compareClientName(userName, client.userName)) {
                     ws.send(JSON.stringify({ error: USER_ALREADY_EXIST_IN_ROOM }));
-                    ws.close();
+                    // ws.close();
+
                     existUser = true;
                 }
             })
@@ -43,6 +44,7 @@ export class SocketService {
     }
 
     public leaveRoom = (idRoom: number, ws: WebSocket, userName: string, userAvatar: string, userPoints: number): void => {
+
         if (validateRoomExistAndById(this.rooms, idRoom, this.roomRepository)) {            
             this.pushOutUser(userName, userAvatar, userPoints, idRoom);
 
@@ -54,8 +56,9 @@ export class SocketService {
 
     public closeRoom = (idRoom: number): void => {
         this.rooms[idRoom].forEach(client => {
-            client.ws.close();
-        });
+            this.sendMessageToUser(idRoom, `The game has been finished.`, client.ws)
+            //client.// ws.close();
+         });
 
         this.deleteRoomInfo(idRoom);
     }
@@ -63,7 +66,7 @@ export class SocketService {
     public startTurnInRoom = async (idRoom: number, ws: WebSocket): Promise<void> => {
         const room = await this.roomRepository.findRoomById(idRoom);
 
-        if (this.rooms[idRoom] && room && this.settings[idRoom].turnsPlayed < this.settings[idRoom].totalTurns) {
+        if (this.rooms[idRoom] && room && this.settings[idRoom] && this.settings[idRoom].turnsPlayed < this.settings[idRoom].totalTurns) {
             const words = room.categories['words'];
             let wordUsed = true;
 
@@ -123,6 +126,8 @@ export class SocketService {
     }
 
     public tryToGuessWord = async (idRoom: number, word: string, ws: WebSocket, userName: string, userAvatar: string, userPoints: number, pointsToSum: number ): Promise<void> => {
+
+        
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
             if (this.wordInRoom[idRoom].has(word)) {
                 this.rooms[idRoom].forEach(client => {
@@ -171,6 +176,7 @@ export class SocketService {
     }
 
     private deleteRoomInfo = (idRoom: number): void => {
+        
         delete this.wordInRoom[idRoom];
         delete this.rooms[idRoom];
         delete this.settings[idRoom];
@@ -193,30 +199,32 @@ export class SocketService {
                 playersTurnsCount: {},
                 usersWinnersPerTurn: []
             }
-            
+
             this.rooms[idRoom].forEach(client => {
                 this.settings[idRoom].playersTurnsCount[client.userName] = 0;
             });
     
             this.startTurnInRoom(idRoom, this.rooms[idRoom].values().next().value.ws);
         } if (this.rooms[idRoom].size > 2) {
+
             this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns + this.roundNumber;
             this.settings[idRoom].playersTurnsCount[userName] = 0;
         }
     }
 
     private pushOutUser = (userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
-        if (!this.rooms || !this.rooms[idRoom]) return;
         
+        if( this.rooms[idRoom] === undefined || this.settings[idRoom] === undefined ) return;
         this.rooms[idRoom].forEach(client => {
-            if (compareClientData(client, userName, userAvatar, userPoints)) {
-                client.ws.close();
+            if (compareClientData(client, userName, userAvatar, userPoints)) {    
+                //client.// ws.close();
+            
                 this.rooms[idRoom].delete(client);
-                
-                delete this.settings[idRoom].playersTurnsCount[userName];
+    
+                delete this.settings[idRoom].playersTurnsCount[userName]
                 this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
-
-                this.finishTurn(idRoom, client.ws, userName);
+                if( this.rooms[idRoom].size > 1 ) this.finishTurn(idRoom, client.ws, userName);
+                else this.closeRoom(idRoom);
             }
         });
     }

@@ -3,6 +3,7 @@ import express from 'express-ws';
 import { WebSocket } from 'ws';
 import expressWs from 'express-ws';
 import { DATA_IS_EMPTY, MESSAGE_NOT_VALID, UNKNOWN_MESSAGE_TYPE } from '../utilities/messages.utility';
+import { validateUserNameAndAvatar } from '../utilities/sockets.utility';
 
 
 const socketController = new SocketController();
@@ -10,12 +11,12 @@ const socketController = new SocketController();
 export const setupSocketRoutes = (path: string, app: express.Application, expressWsInstance: expressWs) => {
     expressWsInstance.applyTo(app);
     
-    app.ws(`${ path }/room/:id`, (ws, req) => {
+    app.ws(`${ path }/room/:id/:username/:avatar`, (ws, req) => {
         const idRoom = req.params.id;
-        const userName = req.headers.username;
-        const userAvatar = req.headers.avatar;
+        const userName = req.params.username;
+        const userAvatar = req.params.avatar;
         const userPoints = 0;
-
+        console.log("Entra ajaja")
         handleSocketConnection(idRoom, userName, userAvatar, userPoints, ws);
     });
 
@@ -23,14 +24,26 @@ export const setupSocketRoutes = (path: string, app: express.Application, expres
 }
 
 const handleSocketConnection = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket) => {
-    socketController.joinRoom(idRoom, userName, userAvatar, userPoints, ws);
+    //socketController.joinRoom(idRoom, userName, userAvatar, userPoints, ws);
+    
 
     ws.on('message', async (msg: string) => {
+        
         handleIncomingMessage(idRoom, userName, msg, ws, userAvatar, userPoints);
     });
 
+    ws.on('ping', (error) => {
+        console.log("ping")
+    })
+
+    ws.on('disconnect', (error) => {
+        console.log("Fuera")
+    })
+
+
     ws.on('close', () => {
-        socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
+        console.log( 'Se cierra')
+        //socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
     });
 }
 
