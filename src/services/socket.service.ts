@@ -213,19 +213,32 @@ export class SocketService {
     }
 
     private pushOutUser = (userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
+
+        console.log(this.rooms)
+        console.log(this.settings)
+
+        let eliminarSettings: boolean = false;
+
+        if( this.rooms[idRoom] === undefined ){
+            return;
+        } 
         
-        if( this.rooms[idRoom] === undefined || this.settings[idRoom] === undefined ) return;
+        if( this.settings[idRoom] !== undefined ) eliminarSettings = true
+
         this.rooms[idRoom].forEach(client => {
         
             if (compareClientData(client, userName, userAvatar)) { 
-
-                console.log("Papi que putas")
+                console.log("Hola 2")
                 this.rooms[idRoom].delete(client);
-                delete this.settings[idRoom].playersTurnsCount[userName]
-                this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
+
+                if( eliminarSettings ) {
+                    delete this.settings[idRoom].playersTurnsCount[userName]
+                    this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
+                }
+
                 this.sendMessageToRoom(idRoom, `${ userName } has left.`, client.ws);   
                 client.ws.close();
-
+                
                 if( this.rooms[idRoom].size > 1 ) this.finishTurn(idRoom, client.ws, userName);
                 else this.closeRoom(idRoom);
             }
