@@ -33,7 +33,7 @@ export class SocketService {
 
                 if (compareClientName(userName, client.userName)) {
                     ws.send(JSON.stringify({ error: USER_ALREADY_EXIST_IN_ROOM }));
-                    // ws.close();
+                    ws.close();
 
                     existUser = true;
                 }
@@ -45,7 +45,7 @@ export class SocketService {
 
     public leaveRoom = (idRoom: number, ws: WebSocket, userName: string, userAvatar: string, userPoints: number): void => {
 
-        if (validateRoomExistAndById(this.rooms, idRoom, this.roomRepository)) {            
+        if (validateRoomExistAndById(this.rooms, idRoom, this.roomRepository)) {       
             this.pushOutUser(userName, userAvatar, userPoints, idRoom);
 
             if (this.rooms[idRoom] && this.rooms[idRoom].size === 0) {
@@ -57,7 +57,7 @@ export class SocketService {
     public closeRoom = (idRoom: number): void => {
         this.rooms[idRoom].forEach(client => {
             this.sendMessageToUser(idRoom, `The game has been finished.`, client.ws)
-            //client.// ws.close();
+            client.ws.close();
          });
 
         this.deleteRoomInfo(idRoom);
@@ -216,13 +216,16 @@ export class SocketService {
         
         if( this.rooms[idRoom] === undefined || this.settings[idRoom] === undefined ) return;
         this.rooms[idRoom].forEach(client => {
-            if (compareClientData(client, userName, userAvatar, userPoints)) {    
-                //client.// ws.close();
-            
+        
+            if (compareClientData(client, userName, userAvatar)) { 
+
+                console.log("Papi que putas")
                 this.rooms[idRoom].delete(client);
-    
                 delete this.settings[idRoom].playersTurnsCount[userName]
                 this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
+                this.sendMessageToRoom(idRoom, `${ userName } has left.`, client.ws);   
+                client.ws.close();
+
                 if( this.rooms[idRoom].size > 1 ) this.finishTurn(idRoom, client.ws, userName);
                 else this.closeRoom(idRoom);
             }

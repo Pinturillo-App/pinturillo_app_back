@@ -16,7 +16,6 @@ export const setupSocketRoutes = (path: string, app: express.Application, expres
         const userName = req.params.username;
         const userAvatar = req.params.avatar;
         const userPoints = 0;
-        console.log("Entra ajaja")
         handleSocketConnection(idRoom, userName, userAvatar, userPoints, ws);
     });
 
@@ -24,26 +23,19 @@ export const setupSocketRoutes = (path: string, app: express.Application, expres
 }
 
 const handleSocketConnection = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket) => {
-    //socketController.joinRoom(idRoom, userName, userAvatar, userPoints, ws);
+    socketController.joinRoom(idRoom, userName, userAvatar, userPoints, ws);
     
 
     ws.on('message', async (msg: string) => {
-        
         handleIncomingMessage(idRoom, userName, msg, ws, userAvatar, userPoints);
     });
 
-    ws.on('ping', (error) => {
-        console.log("ping")
-    })
-
-    ws.on('disconnect', (error) => {
-        console.log("Fuera")
-    })
-
-
     ws.on('close', () => {
-        console.log( 'Se cierra')
-        //socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
+        socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
+    });
+
+    ws.on('disconnect', () => {
+        socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
     });
 }
 
