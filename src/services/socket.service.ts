@@ -228,7 +228,7 @@ export class SocketService {
         this.rooms[idRoom].forEach(client => {
         
             if (compareClientData(client, userName, userAvatar)) { 
-                console.log("Hola 2")
+                
                 this.rooms[idRoom].delete(client);
 
                 if( eliminarSettings ) {

@@ -31,12 +31,10 @@ const handleSocketConnection = (idRoom: number, userName: string, userAvatar: st
     });
 
     ws.on('close', () => {
-        console.log("Se fue")
         socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
     });
 
     ws.on('disconnect', () => {
-        console.log("Desconectado")
         socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
     });
 }
