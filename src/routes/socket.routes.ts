@@ -25,7 +25,6 @@ export const setupSocketRoutes = (path: string, app: express.Application, expres
 const handleSocketConnection = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket) => {
     socketController.joinRoom(idRoom, userName, userAvatar, userPoints, ws);
     
-
     ws.on('message', async (msg: string) => {
         handleIncomingMessage(idRoom, userName, msg, ws, userAvatar, userPoints);
     });
