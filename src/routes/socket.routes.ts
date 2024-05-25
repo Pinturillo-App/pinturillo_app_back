@@ -16,6 +16,7 @@ export const setupSocketRoutes = (path: string, app: express.Application, expres
         const userName = req.params.username;
         const userAvatar = req.params.avatar;
         const userPoints = 0;
+        
         handleSocketConnection(idRoom, userName, userAvatar, userPoints, ws);
     });
 
