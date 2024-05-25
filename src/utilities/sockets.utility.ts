@@ -15,23 +15,18 @@ export const validateUserNameAndAvatar = (userName: string, userAvatar: string, 
 }
 
 export const validateRoomExistById = async (idRoom: number, roomRepository: RoomRepository, ws: WebSocket): Promise<boolean> => {
-    if (await roomRepository.findRoomById(idRoom)) {
-        return true
-    }
-    
+    if (await roomRepository.findRoomById(idRoom)) return true;
 
     ws.send(JSON.stringify({ error: ROOM_NOT_FOUND }));
     ws.close();
     
-    return false
+    return false;
 }
 
 export const validateRoomExistAndById = async (rooms: Object, idRoom: number, roomRepository: RoomRepository) => {
-    if (rooms[idRoom] && await roomRepository.findRoomById(idRoom)) {
-        return true
-    }
+    if (rooms[idRoom] && await roomRepository.findRoomById(idRoom)) return true;
 
-    return false
+    return false;
 }
 
 export const compareClientName = (userName: string, clientName: string ): boolean => {
@@ -39,5 +34,5 @@ export const compareClientName = (userName: string, clientName: string ): boolea
 }
 
 export const compareClientData = (client: any, userName: string, userAvatar: string): boolean => {
-    return client.userName === userName && client.userAvatar === userAvatar
+    return client.userName === userName && client.userAvatar === userAvatar;
 }
