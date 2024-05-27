@@ -40,4 +40,16 @@ export class SocketController {
     public closeRoom = (idRoom: number) => {
         this.socketService.closeRoom(idRoom);
     }
+
+    public drawLine = (idRoom: number, ws: WebSocket, mouseMovement: any) => {
+        this.socketService.drawLine(idRoom, ws, mouseMovement);
+    }
+
+    public drawHistory = (idRoom: number, ws: WebSocket) => {
+        this.socketService.drawHistory(idRoom, ws);
+    }
+
+    public eraseBoard = (idRoom: number) =>{
+        this.socketService.eraseBoard(idRoom);
+    }
 }

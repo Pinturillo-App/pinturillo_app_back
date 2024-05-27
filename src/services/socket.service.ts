@@ -3,6 +3,10 @@ import { RoomRepository } from '../repositories/room.repository';
 import { USER_ALREADY_EXIST_IN_ROOM } from '../utilities/messages.utility';
 import { compareClientData, compareClientName, validateRoomExistAndById, validateRoomExistById, validateUserNameAndAvatar } from '../utilities/sockets.utility';
 
+interface mouseMovement{
+    pos: {x: number, y: number};
+    color: string;
+}
 
 export class SocketService {
     private rooms: object;
@@ -18,6 +22,31 @@ export class SocketService {
         this.settings = {};
         this.roomRepository = new RoomRepository();
     }
+
+    public drawHistory( idRoom: number, ws: WebSocket): void{
+
+        
+        if (this.settings[idRoom] && this.settings[idRoom].lineHistory) {
+
+            this.settings[idRoom].lineHistory.forEach((line: mouseMovement) => {
+                this.sendMessageToUser(idRoom, JSON.stringify({type: "DRAW_LINE", data: line}), ws);
+            });
+        }
+    }
+
+    public eraseBoard(idRoom: number){
+        this.settings[idRoom].lineHistory = [];
+    }
+
+    public drawLine(idRoom: number, ws: WebSocket, data: mouseMovement): void {
+        if (this.settings[idRoom] ) {
+            this.settings[idRoom].lineDrawed = data;
+            this.settings[idRoom].lineHistory.push(data);
+        }
+        this.sendMessageToRoom(idRoom, JSON.stringify({type: "DRAW_LINE", data: data}), ws);
+    }
+
+
 
     public joinRoom = async (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket): Promise<void> => {
         let existUser = false;
@@ -77,6 +106,9 @@ export class SocketService {
                     this.settings[idRoom].playedWords.push(selectedWord);
                     this.settings[idRoom].turnsPlayed++;
                     this.settings[idRoom].usersWinnersPerTurn = [];
+                    this.settings[idRoom].lineDrawed = {}
+                    this.settings[idRoom].lineHistory = []
+
 
                     this.rooms[idRoom].forEach(client => {
                         if (client.ws === ws) {
@@ -114,7 +146,7 @@ export class SocketService {
         })
 
         console.log(this.rooms);
-        console.log(this.settings);
+        // console.log(this.settings);
         console.log("-------------------");
         
         return wsSelected;
@@ -175,6 +207,10 @@ export class SocketService {
             this.rooms[idRoom].add({ ws, userName, userAvatar, userPoints});
             this.sendMessageToRoom(idRoom, `${ userName } has joined the room.`, ws);
             this.settingsTurnsConfiguration( idRoom, userName);
+
+            if( this.rooms[idRoom].size > 2){
+                this.drawHistory( idRoom, ws );
+            }
         }
     }
     
@@ -185,7 +221,9 @@ export class SocketService {
                 turnsPlayed: 0,  
                 playedWords: [],
                 playersTurnsCount: {},
-                usersWinnersPerTurn: []
+                usersWinnersPerTurn: [],
+                lineDrawed: {},
+                lineHistory: []
             }
 
             this.rooms[idRoom].forEach(client => {
@@ -197,11 +235,13 @@ export class SocketService {
             this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns + this.roundNumber;
             this.settings[idRoom].playersTurnsCount[userName] = 0;
         }
+
+        
     }
 
     private pushOutUser = (userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
         console.log(this.rooms);
-        console.log(this.settings);
+        //console.log(this.settings);
 
         let eliminarSettings: boolean = false;
 
