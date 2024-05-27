@@ -25,7 +25,7 @@ export const setupSocketRoutes = (path: string, app: express.Application, expres
 
 const handleSocketConnection = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket) => {
     socketController.joinRoom(idRoom, userName, userAvatar, userPoints, ws);
-    
+
     ws.on('message', async (msg: string) => {
         handleIncomingMessage(idRoom, userName, msg, ws, userAvatar, userPoints);
     });
@@ -50,6 +50,25 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
     }
 
     switch (jsonMessage.type) {
+
+        case 'DRAW_HISTORY':
+            
+            socketController.drawHistory(idRoom, ws);
+            break;
+
+        case 'BOARD_ERASE':
+            socketController.eraseBoard(idRoom);
+            socketController.sendMessageToRoom(idRoom, JSON.stringify( {type: 'BOARD_ERASE'}), ws);
+            break;
+        case 'DRAW_LINE':
+            console.log( jsonMessage )
+            if (!jsonMessage.data) {
+                socketController.sendMessageToUser(idRoom, DATA_IS_EMPTY, ws);
+                return;
+            }
+            socketController.drawLine(idRoom, ws, jsonMessage.data);
+            break;
+
         case 'SEND_MESSAGE':
             if (!jsonMessage.data) {
                 socketController.sendMessageToUser(idRoom, DATA_IS_EMPTY, ws);
@@ -72,6 +91,7 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
             socketController.sendMessageToRoom(idRoom, `${ userName } has left.`, ws);
             socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
             break;
+
         default:
             socketController.sendMessageToUser(idRoom, UNKNOWN_MESSAGE_TYPE, ws);
             return;
