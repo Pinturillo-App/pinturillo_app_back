@@ -110,6 +110,7 @@ export class SocketService {
         let playerTurnAssigned;
         let wsSelected;
 
+        
         playersTurns.sort((a,b) => this.settings[idRoom].playersTurnsCount[a] - this.settings[idRoom].playersTurnsCount[b] );
         playerTurnAssigned = playersTurns[0];
         
