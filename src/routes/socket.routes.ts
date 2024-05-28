@@ -51,6 +51,10 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
 
     switch (jsonMessage.type) {
 
+
+        case "GET_ROOM_USERS":
+            socketController.sendRoomUsers(idRoom, ws);
+            break;
         case 'DRAW_HISTORY':
             
             socketController.drawHistory(idRoom, ws);
