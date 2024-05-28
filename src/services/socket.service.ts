@@ -23,6 +23,10 @@ export class SocketService {
         this.roomRepository = new RoomRepository();
     }
 
+    public sendRoomUsers( idRoom: number, ws: SocketService ){
+        this.sendMessageToRoom( idRoom, JSON.stringify({type: "ROOM_USERS", data: Array.from(this.rooms[idRoom])}), ws);
+    }
+
     public drawHistory( idRoom: number, ws: WebSocket): void{
 
         
@@ -81,8 +85,9 @@ export class SocketService {
     }
 
     public closeRoom = (idRoom: number): void => {
+        this.sendRoomUsers(idRoom, this.rooms[idRoom].values().next().value.ws);
+
         this.rooms[idRoom].forEach(client => {
-            this.sendMessageToUser(idRoom, `The game has been finished.`, client.ws);
             client.ws.close();
          });
 
@@ -129,6 +134,7 @@ export class SocketService {
 
     public finishTurn = (idRoom: number, ws: WebSocket, userName: string) => {
         if (this.settings[idRoom].usersWinnersPerTurn.length == this.rooms[idRoom].size - 1 ) {
+            this.sendRoomUsers(idRoom, ws);
             this.startTurnInRoom(idRoom, this.assignTurn(idRoom, ws));
         }
     }
@@ -154,7 +160,7 @@ export class SocketService {
 
     public tryToGuessWord = async (idRoom: number, word: string, ws: WebSocket, userName: string, userAvatar: string, userPoints: number, pointsToSum: number ): Promise<void> => {
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
-            if (this.wordInRoom[idRoom].has(word)) {
+            if ( this.wordInRoom[idRoom] && this.wordInRoom[idRoom].has(word)) {
                 this.rooms[idRoom].forEach(client => {
                     if (client.userName === userName) {
                         client.userPoints += pointsToSum;
@@ -208,6 +214,7 @@ export class SocketService {
             this.sendMessageToRoom(idRoom, `${ userName } has joined the room.`, ws);
             this.settingsTurnsConfiguration( idRoom, userName);
 
+            this.sendRoomUsers(idRoom, ws);
             if( this.rooms[idRoom].size > 2){
                 this.drawHistory( idRoom, ws );
             }
@@ -260,6 +267,7 @@ export class SocketService {
                 this.sendMessageToRoom(idRoom, `${ userName } has left.`, client.ws);   
                 client.ws.close();
                 
+                 this.sendRoomUsers(idRoom, client.ws);
                 if (this.rooms[idRoom].size > 1) this.finishTurn(idRoom, client.ws, userName);
                 else this.closeRoom(idRoom);
             }

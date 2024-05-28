@@ -52,4 +52,9 @@ export class SocketController {
     public eraseBoard = (idRoom: number) =>{
         this.socketService.eraseBoard(idRoom);
     }
+
+
+    public sendRoomUsers = ( idRoom: number, ws: WebSocket ) =>{
+        this.socketService.sendRoomUsers( idRoom, ws );
+    }
 }
