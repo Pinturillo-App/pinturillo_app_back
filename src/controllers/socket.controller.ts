@@ -14,7 +14,7 @@ export class SocketController {
     }
 
     public leaveRoom = (idRoom: number, ws: WebSocket, userName: string, userAvatar: string, userPoints: number) => {
-        this.socketService.leaveRoom(idRoom, ws, userName, userAvatar, userPoints );
+        this.socketService.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
     }
 
     public startTurnInRoom = (idRoom: number, ws: WebSocket) => {
