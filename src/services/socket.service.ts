@@ -132,8 +132,8 @@ export class SocketService {
         }
     }
 
-    public finishTurn = (idRoom: number, ws: WebSocket, userName: string) => {
-        if (this.settings[idRoom].usersWinnersPerTurn.length == this.rooms[idRoom].size - 1 ) {
+    public finishTurn = (idRoom: number, ws: WebSocket, userName: string, timeFinish: boolean) => {
+        if (this.settings[idRoom].usersWinnersPerTurn.length == this.rooms[idRoom].size - 1 || timeFinish) {
             this.sendRoomUsers(idRoom, ws);
             this.startTurnInRoom(idRoom, this.assignTurn(idRoom, ws));
         }
@@ -167,7 +167,7 @@ export class SocketService {
 
                         this.sendMessageToRoom(idRoom, `${ userName } has guessed the word.`, ws);
                         this.settings[idRoom].usersWinnersPerTurn.push(userName);
-                        this.finishTurn(idRoom, ws, userName);
+                        this.finishTurn(idRoom, ws, userName, false);
                     }
                 });
             } else {
@@ -268,7 +268,7 @@ export class SocketService {
                 client.ws.close();
                 
                  this.sendRoomUsers(idRoom, client.ws);
-                if (this.rooms[idRoom].size > 1) this.finishTurn(idRoom, client.ws, userName);
+                if (this.rooms[idRoom].size > 1) this.finishTurn(idRoom, client.ws, userName, false);
                 else this.closeRoom(idRoom);
             }
         });
