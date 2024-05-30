@@ -29,7 +29,7 @@ export const validateRoomExistAndById = async (rooms: Object, idRoom: number, ro
     return false;
 }
 
-export const compareClientName = (userName: string, clientName: string ): boolean => {
+export const compareClientName = (userName: string, clientName: string): boolean => {
     return userName === clientName;
 }
 

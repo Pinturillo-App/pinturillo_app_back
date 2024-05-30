@@ -3,8 +3,9 @@ import { RoomRepository } from '../repositories/room.repository';
 import { USER_ALREADY_EXIST_IN_ROOM } from '../utilities/messages.utility';
 import { compareClientData, compareClientName, validateRoomExistAndById, validateRoomExistById, validateUserNameAndAvatar } from '../utilities/sockets.utility';
 
+
 interface mouseMovement{
-    pos: {x: number, y: number};
+    pos: { x: number, y: number };
     color: string;
 }
 
@@ -23,34 +24,30 @@ export class SocketService {
         this.roomRepository = new RoomRepository();
     }
 
-    public sendRoomUsers( idRoom: number, ws: SocketService ){
-        this.sendMessageToRoom( idRoom, JSON.stringify({type: "ROOM_USERS", data: Array.from(this.rooms[idRoom])}), ws);
+    public sendRoomUsers = (idRoom: number, ws: SocketService) => {
+        this.sendMessageToRoom( idRoom, JSON.stringify({ type: "ROOM_USERS", data: Array.from(this.rooms[idRoom]) }), ws);
     }
 
-    public drawHistory( idRoom: number, ws: WebSocket): void{
-
-        
+    public drawHistory = (idRoom: number, ws: WebSocket): void => {
         if (this.settings[idRoom] && this.settings[idRoom].lineHistory) {
-
             this.settings[idRoom].lineHistory.forEach((line: mouseMovement) => {
                 this.sendMessageToUser(idRoom, JSON.stringify({type: "DRAW_LINE", data: line}), ws);
             });
         }
     }
 
-    public eraseBoard(idRoom: number){
+    public eraseBoard = (idRoom: number) => {
         this.settings[idRoom].lineHistory = [];
     }
 
-    public drawLine(idRoom: number, ws: WebSocket, data: mouseMovement): void {
-        if (this.settings[idRoom] ) {
-            this.settings[idRoom].lineDrawed = data;
+    public drawLine = (idRoom: number, ws: WebSocket, data: mouseMovement): void => {
+        if (this.settings[idRoom]) {
+            this.settings[idRoom].lineDrawn = data;
             this.settings[idRoom].lineHistory.push(data);
         }
+
         this.sendMessageToRoom(idRoom, JSON.stringify({type: "DRAW_LINE", data: data}), ws);
     }
-
-
 
     public joinRoom = async (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket): Promise<void> => {
         let existUser = false;
@@ -58,12 +55,9 @@ export class SocketService {
         if (validateUserNameAndAvatar(userName, userAvatar, ws)) return;
         
         if (await validateRoomExistById(idRoom, this.roomRepository, ws)) {
-            if (!this.rooms[idRoom]) {
-                this.rooms[idRoom] = new Set();
-            }
+            if (!this.rooms[idRoom]) this.rooms[idRoom] = new Set();
             
             this.rooms[idRoom].forEach(client => {
-
                 if (compareClientName(userName, client.userName)) {
                     ws.send(JSON.stringify({ error: USER_ALREADY_EXIST_IN_ROOM }));
                     ws.close();
@@ -89,7 +83,7 @@ export class SocketService {
 
         this.rooms[idRoom].forEach(client => {
             client.ws.close();
-         });
+        });
 
         this.deleteRoomInfo(idRoom);
     }
@@ -111,9 +105,8 @@ export class SocketService {
                     this.settings[idRoom].playedWords.push(selectedWord);
                     this.settings[idRoom].turnsPlayed++;
                     this.settings[idRoom].usersWinnersPerTurn = [];
-                    this.settings[idRoom].lineDrawed = {}
+                    this.settings[idRoom].lineDrawn = {}
                     this.settings[idRoom].lineHistory = []
-
 
                     this.rooms[idRoom].forEach(client => {
                         if (client.ws === ws) {
@@ -152,7 +145,6 @@ export class SocketService {
         })
 
         console.log(this.rooms);
-        // console.log(this.settings);
         console.log("-------------------");
         
         return wsSelected;
@@ -213,11 +205,9 @@ export class SocketService {
             this.rooms[idRoom].add({ ws, userName, userAvatar, userPoints});
             this.sendMessageToRoom(idRoom, `${ userName } has joined the room.`, ws);
             this.settingsTurnsConfiguration( idRoom, userName);
-
             this.sendRoomUsers(idRoom, ws);
-            if( this.rooms[idRoom].size > 2){
-                this.drawHistory( idRoom, ws );
-            }
+
+            if (this.rooms[idRoom].size > 2) this.drawHistory( idRoom, ws );
         }
     }
     
@@ -229,7 +219,7 @@ export class SocketService {
                 playedWords: [],
                 playersTurnsCount: {},
                 usersWinnersPerTurn: [],
-                lineDrawed: {},
+                lineDrawn: {},
                 lineHistory: []
             }
 
@@ -242,32 +232,29 @@ export class SocketService {
             this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns + this.roundNumber;
             this.settings[idRoom].playersTurnsCount[userName] = 0;
         }
-
-        
     }
 
     private pushOutUser = (userName: string, userAvatar: string, userPoints: number, idRoom: number) => {
         console.log(this.rooms);
-        //console.log(this.settings);
 
-        let eliminarSettings: boolean = false;
+        let deleteSettings: boolean = false;
 
         if (this.rooms[idRoom] === undefined) return;
-        if (this.settings[idRoom] !== undefined) eliminarSettings = true;
+        if (this.settings[idRoom] !== undefined) deleteSettings = true;
 
         this.rooms[idRoom].forEach(client => {
             if (compareClientData(client, userName, userAvatar)) { 
                 this.rooms[idRoom].delete(client);
 
-                if (eliminarSettings) {
+                if (deleteSettings) {
                     delete this.settings[idRoom].playersTurnsCount[userName];
                     this.settings[idRoom].totalTurns = this.settings[idRoom].totalTurns - this.roundNumber;
                 }
 
                 this.sendMessageToRoom(idRoom, `${ userName } has left.`, client.ws);   
                 client.ws.close();
+                this.sendRoomUsers(idRoom, client.ws);
                 
-                 this.sendRoomUsers(idRoom, client.ws);
                 if (this.rooms[idRoom].size > 1) this.finishTurn(idRoom, client.ws, userName);
                 else this.closeRoom(idRoom);
             }
