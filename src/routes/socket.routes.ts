@@ -3,7 +3,6 @@ import express from 'express-ws';
 import { WebSocket } from 'ws';
 import expressWs from 'express-ws';
 import { DATA_IS_EMPTY, MESSAGE_NOT_VALID, UNKNOWN_MESSAGE_TYPE } from '../utilities/messages.utility';
-import { validateUserNameAndAvatar } from '../utilities/sockets.utility';
 
 
 const socketController = new SocketController();
@@ -50,22 +49,17 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
     }
 
     switch (jsonMessage.type) {
-
-
         case "GET_ROOM_USERS":
             socketController.sendRoomUsers(idRoom, ws);
             break;
         case 'DRAW_HISTORY':
-            
             socketController.drawHistory(idRoom, ws);
             break;
-
         case 'BOARD_ERASE':
             socketController.eraseBoard(idRoom);
-            socketController.sendMessageToRoom(idRoom, JSON.stringify( {type: 'BOARD_ERASE'}), ws);
+            socketController.sendMessageToRoom(idRoom, JSON.stringify({type: 'BOARD_ERASE'}), ws);
             break;
         case 'DRAW_LINE':
-            console.log( jsonMessage )
             if (!jsonMessage.data) {
                 socketController.sendMessageToUser(idRoom, DATA_IS_EMPTY, ws);
                 return;
@@ -95,7 +89,6 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
             socketController.sendMessageToRoom(idRoom, `${ userName } has left.`, ws);
             socketController.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
             break;
-
         default:
             socketController.sendMessageToUser(idRoom, UNKNOWN_MESSAGE_TYPE, ws);
             return;

@@ -49,12 +49,11 @@ export class SocketController {
         this.socketService.drawHistory(idRoom, ws);
     }
 
-    public eraseBoard = (idRoom: number) =>{
+    public eraseBoard = (idRoom: number) => {
         this.socketService.eraseBoard(idRoom);
     }
 
-
-    public sendRoomUsers = ( idRoom: number, ws: WebSocket ) =>{
+    public sendRoomUsers = (idRoom: number, ws: WebSocket) => {
         this.socketService.sendRoomUsers( idRoom, ws );
     }
 }
