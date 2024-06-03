@@ -20,7 +20,7 @@ export class Server {
     constructor() {
         this.app = express();
         this.expressWsInstance = expressWs(this.app);
-        this.port = parseInt(process.env.PORT || '3000');
+        this.port = parseInt(process.env.APP_PORT || '3000');
         this.path = '/api';
     
         this.initializeMiddleware();
