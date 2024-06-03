@@ -14,7 +14,7 @@ export class SocketController {
     }
 
     public leaveRoom = (idRoom: number, ws: WebSocket, userName: string, userAvatar: string, userPoints: number) => {
-        this.socketService.leaveRoom(idRoom, ws, userName, userAvatar, userPoints );
+        this.socketService.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
     }
 
     public startTurnInRoom = (idRoom: number, ws: WebSocket) => {
@@ -33,11 +33,27 @@ export class SocketController {
         this.socketService.tryToGuessWord(idRoom, word, ws, userName, userAvatar, userPoints, pointsToSum);
     }
 
-    public finishTurn = (idRoom: number, ws: WebSocket, userName: string) => {
-        this.socketService.finishTurn(idRoom, ws, userName);
+    public finishTurn = (idRoom: number, ws: WebSocket, userName: string, timeFinish: boolean) => {
+        this.socketService.finishTurn(idRoom, ws, userName, timeFinish);
     }
 
     public closeRoom = (idRoom: number) => {
         this.socketService.closeRoom(idRoom);
+    }
+
+    public drawLine = (idRoom: number, ws: WebSocket, mouseMovement: any) => {
+        this.socketService.drawLine(idRoom, ws, mouseMovement);
+    }
+
+    public drawHistory = (idRoom: number, ws: WebSocket) => {
+        this.socketService.drawHistory(idRoom, ws);
+    }
+
+    public eraseBoard = (idRoom: number) => {
+        this.socketService.eraseBoard(idRoom);
+    }
+
+    public sendRoomUsers = (idRoom: number, ws: WebSocket) => {
+        this.socketService.sendRoomUsers( idRoom, ws );
     }
 }
