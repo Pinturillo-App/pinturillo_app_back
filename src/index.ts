@@ -1,9 +1,8 @@
 import { Server } from './config/server.config';
 
 
-const server = new Server();
-
 try {
+    const server = new Server();
     server.startServer();
 } catch (error) {
     console.log(error);
