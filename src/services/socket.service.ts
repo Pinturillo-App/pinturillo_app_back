@@ -152,7 +152,8 @@ export class SocketService {
 
     public tryToGuessWord = async (idRoom: number, word: string, ws: WebSocket, userName: string, userAvatar: string, userPoints: number, pointsToSum: number ): Promise<void> => {
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
-            if ( this.wordInRoom[idRoom] && this.wordInRoom[idRoom].has(word)) {
+            if ( this.wordInRoom[idRoom]&& this.wordInRoom[idRoom].has( word.trim().toLowerCase() )) {
+
                 this.rooms[idRoom].forEach(client => {
                     if (client.userName === userName) {
                         client.userPoints += pointsToSum;
@@ -187,10 +188,10 @@ export class SocketService {
     private changeWordInGame = (idRoom: number, selectedWord: string) => {
         if (!this.wordInRoom[idRoom]) {
             this.wordInRoom[idRoom] = new Set();
-            this.wordInRoom[idRoom].add(selectedWord);
+            this.wordInRoom[idRoom].add(selectedWord.trim().toLowerCase());
         } else {
             this.wordInRoom[idRoom].clear();
-            this.wordInRoom[idRoom].add(selectedWord);
+            this.wordInRoom[idRoom].add(selectedWord.trim().toLowerCase());
         }
     }
 
