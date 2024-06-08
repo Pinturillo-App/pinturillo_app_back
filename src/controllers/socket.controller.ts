@@ -10,50 +10,98 @@ export class SocketController {
     }
 
     public joinRoom = (idRoom: number, userName: string, userAvatar: string, userPoints: number, ws: WebSocket) => {
-        this.socketService.joinRoom(idRoom, userName, userAvatar, userPoints,  ws);
+        try {
+            this.socketService.joinRoom(idRoom, userName, userAvatar, userPoints,  ws);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public leaveRoom = (idRoom: number, ws: WebSocket, userName: string, userAvatar: string, userPoints: number) => {
-        this.socketService.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
+        try {
+            this.socketService.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public startTurnInRoom = (idRoom: number, ws: WebSocket) => {
-        this.socketService.startTurnInRoom(idRoom,  ws);
+        try {
+            this.socketService.startTurnInRoom(idRoom,  ws);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public sendMessageToUser = (idRoom: number, message: string, ws: WebSocket) => {
-        this.socketService.sendMessageToUser(idRoom, message, ws);
+        try {
+            this.socketService.sendMessageToUser(idRoom, message, ws);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public sendMessageToRoom = (idRoom: number, message: string, ws: WebSocket) => {
-        this.socketService.sendMessageToRoom(idRoom, message, ws);
+        try {
+            this.socketService.sendMessageToRoom(idRoom, message, ws);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public tryToGuessWord = (idRoom: number, word: string, ws: WebSocket, userName: string, userAvatar: string, userPoints: number, pointsToSum: number) => {
-        this.socketService.tryToGuessWord(idRoom, word, ws, userName, userAvatar, userPoints, pointsToSum);
+        try {
+            this.socketService.tryToGuessWord(idRoom, word, ws, userName, userAvatar, userPoints, pointsToSum);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public finishTurn = (idRoom: number, ws: WebSocket, userName: string, timeFinish: boolean) => {
-        this.socketService.finishTurn(idRoom, ws, userName, timeFinish);
+        try {
+            this.socketService.finishTurn(idRoom, ws, userName, timeFinish);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public closeRoom = (idRoom: number) => {
-        this.socketService.closeRoom(idRoom);
+        try {
+            this.socketService.closeRoom(idRoom);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public drawLine = (idRoom: number, ws: WebSocket, mouseMovement: any) => {
-        this.socketService.drawLine(idRoom, ws, mouseMovement);
+        try {
+            this.socketService.drawLine(idRoom, ws, mouseMovement);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public drawHistory = (idRoom: number, ws: WebSocket) => {
-        this.socketService.drawHistory(idRoom, ws);
+        try {
+            this.socketService.drawHistory(idRoom, ws);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public eraseBoard = (idRoom: number) => {
-        this.socketService.eraseBoard(idRoom);
+        try {
+            this.socketService.eraseBoard(idRoom);
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     public sendRoomUsers = (idRoom: number, ws: WebSocket) => {
-        this.socketService.sendRoomUsers( idRoom, ws );
+        try {
+            this.socketService.sendRoomUsers(idRoom, ws);
+        } catch(error) {
+            console.log(error);
+        }
     }
 }
