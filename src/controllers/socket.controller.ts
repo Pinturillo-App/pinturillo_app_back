@@ -13,7 +13,7 @@ export class SocketController {
         try {
             this.socketService.joinRoom(idRoom, userName, userAvatar, userPoints,  ws);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
@@ -21,7 +21,7 @@ export class SocketController {
         try {
             this.socketService.leaveRoom(idRoom, ws, userName, userAvatar, userPoints);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
@@ -29,7 +29,7 @@ export class SocketController {
         try {
             this.socketService.startTurnInRoom(idRoom,  ws);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
@@ -37,7 +37,7 @@ export class SocketController {
         try {
             this.socketService.sendMessageToUser(idRoom, message, ws);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
@@ -45,7 +45,7 @@ export class SocketController {
         try {
             this.socketService.sendMessageToRoom(idRoom, message, ws);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
@@ -53,7 +53,7 @@ export class SocketController {
         try {
             this.socketService.tryToGuessWord(idRoom, word, ws, userName, userAvatar, userPoints, pointsToSum);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
@@ -61,23 +61,19 @@ export class SocketController {
         try {
             this.socketService.finishTurn(idRoom, ws, userName, timeFinish);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
     public closeRoom = (idRoom: number) => {
-        try {
-            this.socketService.closeRoom(idRoom);
-        } catch(error) {
-            console.log(error);
-        }
+        this.socketService.closeRoom(idRoom);
     }
 
     public drawLine = (idRoom: number, ws: WebSocket, mouseMovement: any) => {
         try {
             this.socketService.drawLine(idRoom, ws, mouseMovement);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
@@ -85,23 +81,19 @@ export class SocketController {
         try {
             this.socketService.drawHistory(idRoom, ws);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 
     public eraseBoard = (idRoom: number) => {
-        try {
-            this.socketService.eraseBoard(idRoom);
-        } catch(error) {
-            console.log(error);
-        }
+        this.socketService.eraseBoard(idRoom);
     }
 
     public sendRoomUsers = (idRoom: number, ws: WebSocket) => {
         try {
             this.socketService.sendRoomUsers(idRoom, ws);
         } catch(error) {
-            console.log(error);
+            this.socketService.sendMessageToRoom(idRoom, `Error: ${ error.message }.`, ws);
         }
     }
 }

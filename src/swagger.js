@@ -4,10 +4,10 @@ const options = {
     definition: {
         openapi: '3.1.0',
         info: {
-            title: 'PinturilloApp API with swagger',
+            title: 'PintuApp API with swagger',
             version: '1.0.0',
             description:
-                'This is the API for PinturilloApp, a real-time drawing and guessing application. The API provides endpoints for handling categories, rooms, words, and word categories.'
+                'This is the API for PintuApp, a real-time drawing and guessing application. The API provides endpoints for handling categories, rooms, words, and word categories.'
                 .concat('Each of these resources has endpoints for getting, creating, updating, and deleting. \n', 
                         '- Categories: Categories are groupings of words that are used to organize the game. For example, you might have a Animals category that contains words like dog, cat, elephant, etc. \n',
                         '- Rooms: Rooms are where players gather to play. Each room can have a limited number of players and a list of words or categories to use in that game. \n',
@@ -21,7 +21,7 @@ const options = {
                 url: 'https://spdx.org/licenses/MIT.html',
             },
             contact: {
-                name: 'PinturilloApp',
+                name: 'PintuApp',
             },
         },
         components: {
