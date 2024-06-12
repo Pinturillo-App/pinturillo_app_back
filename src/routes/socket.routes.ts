@@ -78,7 +78,7 @@ const handleIncomingMessage = (idRoom: number, userName: string, msg: string, ws
             socketController.startTurnInRoom(idRoom, ws);
             break;
         case 'FINISH_TURN':
-            socketController.sendMessageToRoom(idRoom, `${ userName } has finished their turn`, ws);
+            socketController.sendMessageToRoom(idRoom, `${ userName } has finished their turn.`, ws);
             socketController.finishTurn(idRoom, ws, userName, true);
             break;
         case 'CLOSE_ROOM':

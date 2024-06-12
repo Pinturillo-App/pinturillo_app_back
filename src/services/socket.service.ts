@@ -25,7 +25,7 @@ export class SocketService {
     }
 
     public sendRoomUsers = (idRoom: number, ws: SocketService) => {
-        this.sendMessageToRoom( idRoom, JSON.stringify({ type: "ROOM_USERS", data: Array.from(this.rooms[idRoom]) }), ws);
+        this.sendMessageToRoom(idRoom, JSON.stringify({ type: "ROOM_USERS", data: Array.from(this.rooms[idRoom]) }), ws);
     }
 
     public drawHistory = (idRoom: number, ws: WebSocket): void => {
@@ -137,7 +137,7 @@ export class SocketService {
         let playerTurnAssigned;
         let wsSelected;
         
-        playersTurns.sort((a,b) => this.settings[idRoom].playersTurnsCount[a] - this.settings[idRoom].playersTurnsCount[b] );
+        playersTurns.sort((a,b) => this.settings[idRoom].playersTurnsCount[a] - this.settings[idRoom].playersTurnsCount[b]);
         playerTurnAssigned = playersTurns[0];
         
         this.rooms[idRoom].forEach(client => {
@@ -152,11 +152,11 @@ export class SocketService {
 
     public tryToGuessWord = async (idRoom: number, word: string, ws: WebSocket, userName: string, userAvatar: string, userPoints: number, pointsToSum: number ): Promise<void> => {
         if (this.rooms[idRoom] && this.roomRepository.findRoomById(idRoom)) {
-            if ( this.wordInRoom[idRoom] && this.wordInRoom[idRoom].has(word)) {
+            if ( this.wordInRoom[idRoom]&& this.wordInRoom[idRoom].has( word.trim().toLowerCase() )) {
+
                 this.rooms[idRoom].forEach(client => {
                     if (client.userName === userName) {
                         client.userPoints += pointsToSum;
-
                         this.sendMessageToRoom(idRoom, `${ userName } has guessed the word.`, ws);
                         this.settings[idRoom].usersWinnersPerTurn.push(userName);
                         this.finishTurn(idRoom, ws, userName, false);
@@ -187,10 +187,10 @@ export class SocketService {
     private changeWordInGame = (idRoom: number, selectedWord: string) => {
         if (!this.wordInRoom[idRoom]) {
             this.wordInRoom[idRoom] = new Set();
-            this.wordInRoom[idRoom].add(selectedWord);
+            this.wordInRoom[idRoom].add(selectedWord.trim().toLowerCase());
         } else {
             this.wordInRoom[idRoom].clear();
-            this.wordInRoom[idRoom].add(selectedWord);
+            this.wordInRoom[idRoom].add(selectedWord.trim().toLowerCase());
         }
     }
 
@@ -207,7 +207,7 @@ export class SocketService {
             this.settingsTurnsConfiguration( idRoom, userName);
             this.sendRoomUsers(idRoom, ws);
 
-            if (this.rooms[idRoom].size > 2) this.drawHistory( idRoom, ws );
+            if (this.rooms[idRoom].size > 2) this.drawHistory(idRoom, ws);
         }
     }
     
@@ -252,10 +252,12 @@ export class SocketService {
                 }
 
                 this.sendMessageToRoom(idRoom, `${ userName } has left.`, client.ws);   
+            
                 client.ws.close();
+            
                 this.sendRoomUsers(idRoom, client.ws);
-                
-                 this.sendRoomUsers(idRoom, client.ws);
+                this.sendRoomUsers(idRoom, client.ws);
+
                 if (this.rooms[idRoom].size > 1) this.finishTurn(idRoom, client.ws, userName, false);
                 else this.closeRoom(idRoom);
             }
